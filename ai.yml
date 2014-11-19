@@ -1,0 +1,20 @@
+- hosts: www
+  vars:
+    days_to_keep_logs: 365
+  sudo: yes
+
+  tasks:
+
+  # Note on ansible regex: uses Python regex's, not man 7 regex.
+ 
+  # Rotate all logs daily so our error checker only looks at yesterday's log entries.
+  - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([  \t]\*)weekly[  \t]*$'   replace='\1daily'
+  - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([  \t]*)rotate[   \t].*$'  replace='\1rotate {{ days_to_keep_logs }}'
+
+  # ufw is not in syslog-ng.
+  - replace:  dest=/etc/logrotate.d/ufw  regexp='^([  \t]*)weekly[  \t]*$'   replace='\1daily'
+  - replace:  dest=/etc/logrotate.d/ufw  regexp='^([  \t]*)rotate[  \t].*$'  replace='\1rotate {{ days_to_keep_logs }}'
+
+  # dpgk is not in syslog-ng.
+  - replace:  dest=/etc/logrotate.d/dpkg  regexp='^([  \t]*)monthly[  \t]*$'   replace='\1daily'
+  - replace:  dest=/etc/logrotate.d/dpkg  regexp='^([  \t]*)rotate[   \t].*$'  replace='\1rotate {{ days_to_keep_logs }}'
