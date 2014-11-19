@@ -4,7 +4,8 @@ Since: Wed Nov 19 11:47:27 EST 2014
 	Get a daily email of log messages that you don't recognize
 	in log files that you don't ignore.
 
-	For simplicity, I set logs to rotate daily.  See ai.yml.
+	For simplicity, I set logs to rotate daily (avoids tailing logs,
+	since I run ai daily as well).
 
 	My environment is an Ubuntu in a tinyvz host, so the stoplists
 	are short but complete.
