@@ -44,6 +44,23 @@ Todo:
 	- Store stoplist patterns as one file per daemon.  Then cat
 	  together lists for daemons you care about to build stoplist.
 
+	- Implement the "retail" trick described below so we don't
+	  have to use the rotate daily hack and can still run from
+	  cron and works for all log files not excluded.
+
+		Basically, it was like tail but it remembered the
+		offset in the file from the previous run, and the
+		inode of the file (so it'd detect file shifts).
+
+		The trick is to keep one fd open to the file and
+		seek within it, then stat it every so often to see
+		if the file has grown or changed inode. If it has,
+		read to EOF, open the new file, and start again.
+
+		That way you can chop the end of the log file through
+		a filter every couple seconds with minimal expense
+		in CPU and disk I/O.
+
 
 Inspired by a 1997 HOW-TO posted by Marcus Ranum, which I found
 at http://www.ranum.com/security/computer_security/papers/ai/.
