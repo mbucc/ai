@@ -21,24 +21,27 @@ Setup:
 
 	2.  Copy setup.ai.sh to your host.
 
-	3.  Filter out log files you don't care about by adding
-	    regular expressions to stopfiles.
+	3.  Tune stopfiles by repeatedly running setup.ai.sh after
+	    adding regular expressions to stopfiles.
 
-	4.  Filter out normal log lines you don't want to be notified
-	    about by adding regular expressions to stoplist.
+	4.  Tune stoplist by repeatedly running setup.ai.sh after
+	    adding regular expressions to stoplist.
 
 	5.  When setup.ai.sh outputs only lines you want to be
 	    notified about, copy your stop files to this directory.
 
-	6.  Edit ansible hosts file and run
+	6.  Edit ansible hosts file and review/edit ai.yml.
 
                       make clean all
+
+	    n.b. If you don't edit ai.yml, all logs are set to
+	    rotate daily and be saved for 365 days.
 
 	7.  If you like, submit a pull request with your stop files.
 
 Todo:
 
-	- Store regex patterns as one file per daemon.  Then cat
+	- Store stoplist patterns as one file per daemon.  Then cat
 	  together lists for daemons you care about to build stoplist.
 
 
