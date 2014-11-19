@@ -4,18 +4,50 @@ Since: Wed Nov 19 11:47:27 EST 2014
 	Get a daily email of log messages that you don't recognize
 	in log files that you don't ignore.
 
-	For simplicity, I set logs to rotate daily (avoids tailing logs,
-	since I run ai daily as well).
+	For simplicity, I rotate logs daily.  Since ai runs daily,
+	this avoids trying to figure out what log lines were added
+	since the last run.
 
 	My environment is an Ubuntu in a tinyvz host, so the stoplists
-	are short but complete.
+	are really short.
+
+	I am also just put it live, so I am probably ignoring far
+	too few log lines (for example, nginx!), while I get a feel
+	for how it works.
+
+Setup:
+
+	1.  Read HOW-TO included below.
+
+	2.  Copy setup.ai.sh to your host.
+
+	3.  Filter out log files you don't care about by adding
+	    regular expressions to stopfiles.
+
+	4.  Filter out normal log lines you don't want to be notified
+	    about by adding regular expressions to stoplist.
+
+	5.  When setup.ai.sh outputs only lines you want to be
+	    notified about, copy your stop files to this directory.
+
+	6.  Edit ansible hosts file and run
+
+                      make clean all
+
+	7.  If you like, submit a pull request with your stop files.
+
+Todo:
+
+	- Store regex patterns as one file per daemon.  Then cat
+	  together lists for daemons you care about to build stoplist.
 
 
-Inspired by a 1997 how-to posted by Marcus Ranum, which I found
+Inspired by a 1997 HOW-TO posted by Marcus Ranum, which I found
 at http://www.ranum.com/security/computer_security/papers/ai/.
 
+
 	---------------------- START HOWTO --------------------------
-	Marcus J. Ranum mjr@nfr.net
+	Marcus J. Ranum
 	Tue, 23 Sep 1997 23:06:06 +0000
 	artificial ignorance: how-to guide
 

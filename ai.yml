@@ -5,16 +5,41 @@
 
   tasks:
 
-  # Note on ansible regex: uses Python regex's, not man 7 regex.
+  #---------------------------------------------------------------------------
+  #
+  #                           L O G   R O T A T I O N 
+  #
+  #---------------------------------------------------------------------------
+
+  - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([ \t]\*)weekly[ \t]*$' replace='\1daily'
+  - replace:  dest=/etc/logrotate.d/ufw        regexp='^([ \t]*)weekly[ \t]*$'  replace='\1daily'
+  - replace:  dest=/etc/logrotate.d/dpkg       regexp='^([ \t]*)monthly[ \t]*$' replace='\1daily'
+  - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([ \t]*)rotate[ \t]*$'  replace='\1rotate {{ days_to_keep_logs }}'
+  - replace:  dest=/etc/logrotate.d/ufw        regexp='^([ \t]*)rotate[ \t]*$'  replace='\1rotate {{ days_to_keep_logs }}'
+  - replace:  dest=/etc/logrotate.d/dpkg       regexp='^([ \t]*)rotate[ \t]*$'  replace='\1rotate {{ days_to_keep_logs }}'
  
-  # Rotate all logs daily so our error checker only looks at yesterday's log entries.
-  - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([  \t]\*)weekly[  \t]*$'   replace='\1daily'
-  - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([  \t]*)rotate[   \t].*$'  replace='\1rotate {{ days_to_keep_logs }}'
 
-  # ufw is not in syslog-ng.
-  - replace:  dest=/etc/logrotate.d/ufw  regexp='^([  \t]*)weekly[  \t]*$'   replace='\1daily'
-  - replace:  dest=/etc/logrotate.d/ufw  regexp='^([  \t]*)rotate[  \t].*$'  replace='\1rotate {{ days_to_keep_logs }}'
+  #---------------------------------------------------------------------------
+  #
+  #                            C O P Y   F I L E S 
+  #
+  #---------------------------------------------------------------------------
 
-  # dpgk is not in syslog-ng.
-  - replace:  dest=/etc/logrotate.d/dpkg  regexp='^([  \t]*)monthly[  \t]*$'   replace='\1daily'
-  - replace:  dest=/etc/logrotate.d/dpkg  regexp='^([  \t]*)rotate[   \t].*$'  replace='\1rotate {{ days_to_keep_logs }}'
+  - file:  path=/root/bin  state=directory           group=root  owner=root  mode=755
+  - copy:  src=stoplist    dest=/root/bin/stoplist   owner=root  group=root  mode=644
+  - copy:  src=stopfiles   dest=/root/bin/stopfiles  owner=root  group=root  mode=644
+  - copy:  src=ai.sh       dest=/root/bin/ai.sh      owner=root  group=root  mode=755
+
+
+  #---------------------------------------------------------------------------
+  #
+  #                           P U T   I N   C R O N 
+  #
+  # Run before logrotate:
+  #
+  #      # grep cron.daily /etc/crontab
+  #      45 5 * * * root test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
+  #
+  #---------------------------------------------------------------------------
+
+  - cron: user=root name="Artificial Ignorance" hour="4" minute="23" job="/root/bin/ai.sh 1>&2"
