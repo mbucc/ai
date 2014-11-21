@@ -36,6 +36,7 @@ Content-Type: text/html
 <title>Log Bot yammered on $(date +%F)</title>
 </head>
 <body style="margin: 5%; padding: 0; font-family: Courier, monospace">
+<p><i>Generated at $(date "+%T %Z")</i></p>
 EOF
 
 # Piping into while creates a subshell,
