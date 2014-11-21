@@ -42,4 +42,4 @@
   #
   #---------------------------------------------------------------------------
 
-  - cron: user=root name="Artificial Ignorance" hour="4" minute="23" job="/root/bin/ai.sh 1>&2"
+  - cron: user=root name="Artificial Ignorance" hour="4" minute="23" job="/root/bin/ai.sh"
