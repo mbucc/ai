@@ -62,7 +62,7 @@ cat >> $OUTFN << EOF
 </html>
 EOF
 if [ $N1 -gt $N0 ] ; then
-	sendmail -t < $OUTFN
+	/usr/sbin/sendmail -t < $OUTFN
 fi
 
 rm -f $TMP1 $TMP2 $OUTFN
