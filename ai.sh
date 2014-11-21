@@ -47,14 +47,12 @@ N0=$(cat $OUTFN | wc -l)
 find /var/log -type f | grep -v -f $TMP1 |  while read fn; do
     if grep -v -f $TMP2 $fn > /dev/null ; then
         echo "<h2>$fn</h2>" >> $OUTFN
-        echo "<pre>" >> $OUTFN
 
 	# Add paragraph breaks
-	# so if phone wraps log lines
-	# we can still distinguish.
-	grep -n -v -f $TMP2 $fn |sed 's/$/<p>/' >> $OUTFN
+	# so when the phone wraps log lines
+	# it is easy to tell them apart.
+	grep -n -v -f $TMP2 $fn |sed 's/^/<p>/' >> $OUTFN
 
-        echo "</pre>" >> $OUTFN
     fi
 done
 N1=$(cat $OUTFN | wc -l)
