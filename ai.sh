@@ -19,7 +19,7 @@ grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stopfiles > $TMP1
 grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stoplist > $TMP2
 
 
-[ "x$MAILTO" != "x" ] && TO=$MAILTO || TO=$USER
+[ "x$MAILTO" != "x" ] && TO=$MAILTO || TO=$LOGNAME
 
 # doctype and xmlns guidance from http://htmlemailboilerplate.com/.
 
