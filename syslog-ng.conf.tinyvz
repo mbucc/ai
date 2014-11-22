@@ -242,6 +242,7 @@ log {
 log {
         source(s_all);
         filter(f_mail);
+        filter(f_at_least_warn);
         destination(df_mail);
 };
 
@@ -257,30 +258,6 @@ log {
         source(s_all);
         filter(f_uucp);
         destination(df_uucp);
-};
-
-# mail.info                       -/var/log/mail.info
-log {
-        source(s_all);
-        filter(f_mail);
-        filter(f_at_least_info);
-        destination(df_facility_dot_info);
-};
-
-# mail.warn                       -/var/log/mail.warn
-log {
-        source(s_all);
-        filter(f_mail);
-        filter(f_at_least_warn);
-        destination(df_facility_dot_warn);
-};
-
-# mail.err                        /var/log/mail.err
-log {
-        source(s_all);
-        filter(f_mail);
-        filter(f_at_least_err);
-        destination(df_facility_dot_err);
 };
 
 # news.crit                       /var/log/news/news.crit

@@ -16,6 +16,3 @@ apt/history.log
 wtmp
 lastlog
 faillog
-
-# mail.info and mail.log have duplicate lines
-mail.info
