@@ -106,7 +106,6 @@ destination df_kern { file("/var/log/kern.log"); };
 destination df_lpr { file("/var/log/lpr.log"); };
 destination df_mail { file("/var/log/mail.log"); };
 destination df_user { file("/var/log/user.log"); };
-destination df_uucp { file("/var/log/uucp.log"); };
 
 # these files are meant for the mail system log files
 # and provide re-usable destinations for {mail,cron,...}.info,
@@ -135,15 +134,14 @@ filter f_auth { facility(auth, authpriv); };
 # all messages except from the auth and authpriv facilities
 filter f_syslog { not facility(auth, authpriv); };
 
-# respectively: messages from the cron, daemon, kern, lpr, mail, user,
-# and uucp facilities
+# respectively: messages from the cron, daemon, kern, lpr, mail,
+# and user facilities
 filter f_cron { facility(cron); };
 filter f_daemon { facility(daemon); };
 filter f_kern { facility(kern); };
 filter f_lpr { facility(lpr); };
 filter f_mail { facility(mail); };
 filter f_user { facility(user); };
-filter f_uucp { facility(uucp); };
 
 # some filters to select messages of priority greater or equal to info, warn,
 # and err
@@ -167,14 +165,6 @@ filter f_messages {
 
 # messages with priority emerg
 filter f_emerg { level(emerg); };
-
-# complex filter for messages usually sent to the xconsole
-filter f_xconsole {
-    facility(daemon,mail)
-        or level(debug,info,notice,warn)
-        ;
-};
-
 
 ######
 # logs
@@ -240,14 +230,6 @@ log {
         filter(f_user);
         destination(df_user);
 };
-
-# uucp.*                          /var/log/uucp.log
-log {
-        source(s_all);
-        filter(f_uucp);
-        destination(df_uucp);
-};
-
 
 # *.=debug;\
 #         auth,authpriv.none;\
