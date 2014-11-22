@@ -19,9 +19,10 @@ faillog
 
 # All system messages are logged to syslog or auth.log.
 # All other logs are duplicates.
-cron.log
-daemon.log
-kern.log
-lpr.log
-mail.log
-user.log
+cron\..*
+daemon\..*
+kern\..*
+lpr\..*
+mail\..*
+user\..*
+messages
