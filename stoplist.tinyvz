@@ -48,12 +48,14 @@ postfix/cleanup.*: .*: message-id=.*
 monitor will print the received events for:
 
 # dpkg
-# This one is tough to exclusions right
-# without user regular expressions
-# that are so broad (e.g. 'configure')
-# they may swallow other errors we want.
+# This one is a tough one.
+# The log entries are so short,
+# you need to use broad regular expressions
+# and then risk swallowing errors you want.
 # Maybe skip package notifications entirely
-# by adding dpkg.log to stopfiles.
+# by adding dpkg.log to stopfiles
+# and be happy with daemon restart messages.
+# Leave in for now.
  status unpacked
 update-alternatives: run with .*
 status half-configured
