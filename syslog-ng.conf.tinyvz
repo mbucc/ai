@@ -117,12 +117,6 @@ destination df_facility_dot_warn { file("/var/log/$FACILITY.warn"); };
 destination df_facility_dot_err { file("/var/log/$FACILITY.err"); };
 destination df_facility_dot_crit { file("/var/log/$FACILITY.crit"); };
 
-# these files are meant for the news system, and are kept separated
-# because they should be owned by "news" instead of "root"
-destination df_news_dot_notice { file("/var/log/news/news.notice" owner("news")); };
-destination df_news_dot_err { file("/var/log/news/news.err" owner("news")); };
-destination df_news_dot_crit { file("/var/log/news/news.crit" owner("news")); };
-
 # some more classical and useful files found in standard syslog configurations
 destination df_debug { file("/var/log/debug"); };
 destination df_messages { file("/var/log/messages"); };
@@ -145,14 +139,13 @@ filter f_auth { facility(auth, authpriv); };
 # all messages except from the auth and authpriv facilities
 filter f_syslog { not facility(auth, authpriv); };
 
-# respectively: messages from the cron, daemon, kern, lpr, mail, news, user,
+# respectively: messages from the cron, daemon, kern, lpr, mail, user,
 # and uucp facilities
 filter f_cron { facility(cron); };
 filter f_daemon { facility(daemon); };
 filter f_kern { facility(kern); };
 filter f_lpr { facility(lpr); };
 filter f_mail { facility(mail); };
-filter f_news { facility(news); };
 filter f_user { facility(user); };
 filter f_uucp { facility(uucp); };
 
@@ -165,15 +158,15 @@ filter f_at_least_warn { level(warn..emerg); };
 filter f_at_least_err { level(err..emerg); };
 filter f_at_least_crit { level(crit..emerg); };
 
-# all messages of priority debug not coming from the auth, authpriv, news, and
+# all messages of priority debug not coming from the auth, authpriv, and
 # mail facilities
-filter f_debug { level(debug) and not facility(auth, authpriv, news, mail); };
+filter f_debug { level(debug) and not facility(auth, authpriv, mail); };
 
 # all messages of info, notice, or warn priority not coming form the auth,
-# authpriv, cron, daemon, mail, and news facilities
+# authpriv, cron, daemon, and mail facilities
 filter f_messages {
         level(info,notice,warn)
-            and not facility(auth,authpriv,cron,daemon,mail,news);
+            and not facility(auth,authpriv,cron,daemon,mail);
 };
 
 # messages with priority emerg
@@ -183,8 +176,7 @@ filter f_emerg { level(emerg); };
 filter f_xconsole {
     facility(daemon,mail)
         or level(debug,info,notice,warn)
-        or (facility(news)
-                and level(crit,err,notice));
+        ;
 };
 
 
@@ -260,34 +252,10 @@ log {
         destination(df_uucp);
 };
 
-# news.crit                       /var/log/news/news.crit
-log {
-        source(s_all);
-        filter(f_news);
-        filter(f_at_least_crit);
-        destination(df_news_dot_crit);
-};
-
-# news.err                        /var/log/news/news.err
-log {
-        source(s_all);
-        filter(f_news);
-        filter(f_at_least_err);
-        destination(df_news_dot_err);
-};
-
-# news.notice                     /var/log/news/news.notice
-log {
-        source(s_all);
-        filter(f_news);
-        filter(f_at_least_notice);
-        destination(df_news_dot_notice);
-};
-
 
 # *.=debug;\
 #         auth,authpriv.none;\
-#         news.none;mail.none     -/var/log/debug
+#         mail.none     -/var/log/debug
 log {
         source(s_all);
         filter(f_debug);
@@ -298,7 +266,7 @@ log {
 # *.=info;*.=notice;*.=warn;\
 #         auth,authpriv.none;\
 #         cron,daemon.none;\
-#         mail,news.none          -/var/log/messages
+#         mail          -/var/log/messages
 log {
         source(s_all);
         filter(f_messages);
@@ -313,10 +281,6 @@ log {
 };
 
 
-# daemon.*;mail.*;\
-#         news.crit;news.err;news.notice;\
-#         *.=debug;*.=info;\
-#         *.=notice;*.=warn       |/dev/xconsole
 log {
         source(s_all);
         filter(f_xconsole);
