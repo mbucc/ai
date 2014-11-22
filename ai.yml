@@ -1,6 +1,11 @@
 - hosts: www
   vars:
     days_to_keep_logs: 365
+    # This 'env' variable is not DRY (see Makefile).
+    # XXX: Dry this up by using script to load variable in Makefile.
+    # But until someone other than myself expresses interest,
+    # treat it as a tree falling in the woods
+    # with no-one listening.
     env: tinyvz
   sudo: yes
 
@@ -8,7 +13,7 @@
 
   #---------------------------------------------------------------------------
   #
-  #                           L O G   R O T A T I O N 
+  #                           L O G   R O T A T I O N
   #
   #---------------------------------------------------------------------------
 
@@ -18,7 +23,7 @@
   - replace:  dest=/etc/logrotate.d/syslog-ng  regexp='^([ \t]*)rotate[ \t]*$'  replace='\1rotate {{ days_to_keep_logs }}'
   - replace:  dest=/etc/logrotate.d/ufw        regexp='^([ \t]*)rotate[ \t]*$'  replace='\1rotate {{ days_to_keep_logs }}'
   - replace:  dest=/etc/logrotate.d/dpkg       regexp='^([ \t]*)rotate[ \t]*$'  replace='\1rotate {{ days_to_keep_logs }}'
- 
+
 
   #---------------------------------------------------------------------------
   #
@@ -31,7 +36,7 @@
 
   #---------------------------------------------------------------------------
   #
-  #                            C O P Y   F I L E S 
+  #                            C O P Y   F I L E S
   #
   #---------------------------------------------------------------------------
 
@@ -43,7 +48,7 @@
 
   #---------------------------------------------------------------------------
   #
-  #                           P U T   I N   C R O N 
+  #                           P U T   I N   C R O N
   #
   # Run before logrotate:
   #
