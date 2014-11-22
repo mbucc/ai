@@ -121,10 +121,6 @@ destination df_facility_dot_crit { file("/var/log/$FACILITY.crit"); };
 destination df_debug { file("/var/log/debug"); };
 destination df_messages { file("/var/log/messages"); };
 
-# pipes
-# a console to view log messages under X
-destination dp_xconsole { pipe("/dev/xconsole"); };
-
 # consoles
 # this will send messages to everyone logged in
 destination du_all { usertty("*"); };
@@ -278,12 +274,5 @@ log {
         source(s_all);
         filter(f_emerg);
         destination(du_all);
-};
-
-
-log {
-        source(s_all);
-        filter(f_xconsole);
-        destination(dp_xconsole);
 };
 
