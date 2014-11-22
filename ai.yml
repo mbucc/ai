@@ -1,6 +1,7 @@
 - hosts: www
   vars:
     days_to_keep_logs: 365
+    env: tinyvz
   sudo: yes
 
   tasks:
@@ -25,7 +26,7 @@
   #
   #---------------------------------------------------------------------------
 
-  - copy:  src= syslog-ng.conf.tinyvz  dest=/etc/syslog-ng/syslog-ng.conf  backup=yes  owner=root  group=root  mode=644
+  - copy:  src=syslog-ng.conf.{{env}}  dest=/etc/syslog-ng/syslog-ng.conf  backup=yes  owner=root  group=root  mode=644
 
 
   #---------------------------------------------------------------------------
@@ -34,10 +35,10 @@
   #
   #---------------------------------------------------------------------------
 
-  - file:  path=/root/bin  state=directory           group=root  owner=root  mode=755
-  - copy:  src=stoplist    dest=/root/bin/stoplist   owner=root  group=root  mode=644
-  - copy:  src=stopfiles   dest=/root/bin/stopfiles  owner=root  group=root  mode=644
-  - copy:  src=ai.sh       dest=/root/bin/ai.sh      owner=root  group=root  mode=755
+  - file:  path=/root/bin         state=directory           group=root  owner=root  mode=755
+  - copy:  src=stoplist.{{env}}   dest=/root/bin/stoplist   owner=root  group=root  mode=644
+  - copy:  src=stopfiles.{{env}}  dest=/root/bin/stopfiles  owner=root  group=root  mode=644
+  - copy:  src=ai.sh              dest=/root/bin/ai.sh      owner=root  group=root  mode=755
 
 
   #---------------------------------------------------------------------------
