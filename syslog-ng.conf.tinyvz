@@ -64,8 +64,9 @@ options {
         # (default is 2048)
         #log_msg_size(2048);
 
-	#Disable statistic log messages.
-	stats_freq(0);
+	# Send stats one a week: 60 s/m * 60 m/hr * 24 hr/day * 7 days/week = 604800 seconds
+	# If we don't ignore these in stoplist, it's a heartbeat.
+	stats_freq(604800);
 
 	# Some program send log messages through a private implementation.
 	# and sometimes that implementation is bad. If this happen syslog-ng
