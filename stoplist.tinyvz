@@ -66,3 +66,6 @@ trigproc
 status triggers-pending
 startup archives unpack
 update-alternatives: link
+
+# syslog-ng
+syslog-ng.*: Configuration reload request received, reloading configuration;
