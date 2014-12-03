@@ -51,8 +51,13 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <sysexits.h>
+
+
 #ifdef _OS_DOS
   #include <fcntl.h>
+  #define PRIdS "Id"
+#else
+  #define PRIdS "zd"
 #endif
 
 #define MAX 2048
@@ -250,7 +255,7 @@ int main(int argc, char *argv[])
   fprintf(stderr,"Debug 260 - offset_filename: %s\n",offset_filename);
   fprintf(stderr,"Debug 261 - oldlog_dir: %s\n",oldlog_dir);
   fprintf(stderr,"Debug 262 - oldlog_pat: %s\n",oldlog_pat);
-  fprintf(stderr,"Debug 263 - Read buffer size: %i\n",readbuffersize);
+  fprintf(stderr,"Debug 263 - Read buffer size: %" PRIdS "\n",readbuffersize);
   if ( suppressflag != 0 ) fprintf(stderr,"Debug 264 - No log output\n");
   if ( testflag != 0 ) fprintf(stderr,"Debug 265 - No offset_file update\n");
   }
@@ -386,15 +391,15 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
 
   if ( debugflag != 0 ) {
     #ifdef _OS_UNIX
-      fprintf(stderr,"Debug 390 - file_stat.st_ino size: %i\n",sizeof(file_stat.st_ino));
+      fprintf(stderr,"Debug 390 - file_stat.st_ino size: %" PRIdS "\n",sizeof(file_stat.st_ino));
     #endif
-    fprintf(stderr,"Debug 391 - file_stat.st_size size: %i\n",sizeof(file_stat.st_size));
-    fprintf(stderr,"Debug 392 - fpos_t size: %i\n",sizeof(fpos_t));
+    fprintf(stderr,"Debug 391 - file_stat.st_size size: %" PRIdS "\n",sizeof(file_stat.st_size));
+    fprintf(stderr,"Debug 392 - fpos_t size: %" PRIdS "\n",sizeof(fpos_t));
   }
   // 32 bits, exit if file too big
   if ((sizeof(fpos_t) == 4) || sizeof(file_stat.st_size) == 4) {
     if ((file_stat.st_size > 2147483646) || (file_stat.st_size < 0)) {
-      fprintf(stderr,"ERROR 403 - log file, %s, is too large at %d bytes.\n", logname, file_stat.st_size);
+      fprintf(stderr,"ERROR 403 - log file, %s, is too large at %lld bytes.\n", logname, (long long) file_stat.st_size);
       exit(EX_DATAERR);
     }
   }
@@ -436,7 +441,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
     dp = opendir(oldlog_directory);
     if (dp != NULL) {
       file_mod_time = 0;
-      while (ep = readdir (dp))
+      while ((ep = readdir (dp)))
       if (strcmp(ep->d_name,".") != 0 && strcmp(ep->d_name,"..") != 0) {
         // put the directory and the filename back together
         strcpy(old_logpathfile, oldlog_directory);
@@ -500,7 +505,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
     strcpy(old_logfile,"NoFileFound");
     dp = opendir(oldlog_directory);
     if (dp != NULL) {
-      while (ep = readdir (dp))
+      while ((ep = readdir (dp)))
       if (strcmp(ep->d_name,".") != 0 && strcmp(ep->d_name,"..") != 0) {
         // put the directory and old filename back together
         strcpy(old_logpathfile, oldlog_directory);
@@ -718,8 +723,8 @@ printf("\n\nVersion: %s",VERSION);
 
 if ((sizeof(test_stat.st_size) < 8) || (sizeof(fpos_t) < 8)) printf("\nComplied with 32bit file pointers, warning: 2G file size limit.");
 if ((sizeof(test_stat.st_size) >= 8) && (sizeof(fpos_t) >= 8)) printf("\nComplied with 64bit file pointers, large file aware.");
-if ( debugflag != 0 ) printf("\nSize of test_stat.st_size = %i bytes",sizeof(test_stat.st_size));
-if ( debugflag != 0 ) printf("\nSize of fpos_t = %i bytes",sizeof(fpos_t));
+if ( debugflag != 0 ) printf("\nSize of test_stat.st_size = %" PRIdS " bytes",sizeof(test_stat.st_size));
+if ( debugflag != 0 ) printf("\nSize of fpos_t = %" PRIdS " bytes",sizeof(fpos_t));
 if ( debugflag != 0 ) printf("\nCompiled with DEBUG on");
 
 printf("\n\nWritten by Ross Moffatt <ross.stuff@telstra.com>");
