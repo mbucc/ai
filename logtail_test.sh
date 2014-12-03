@@ -23,9 +23,10 @@
 LOGTAIL=./logtail
 D=./testing
 
+rm -rf $D
 mkdir -p $D
 
-# Test that a 
+# logtail outputs two lines added since last run.
 cat > $D/1.log << EOF
 line1
 line2
@@ -41,9 +42,20 @@ cat > $D/1.exp << EOF
 line4
 line5
 EOF
-diff $D/1.act $D/1.exp
+diff $D/1.act $D/1.exp && printf "." || echo "FAIL: didn't see two new lines"
 
+# logtail uses offset.<logfile> as default offset filename
+cat > $D/2.log << EOF
+line1
+line2
+line3
+EOF
+$LOGTAIL $D/2.log > /dev/null
+F=offset.2.log
+[ -f $D/$F ] && printf "."  || echo "FAIL: default offset file \"$D/$F\" not created."
 
 # If we get an error, the -e switch will abort script before this line
 # so we can inspect data.
-rm -rf $D
+
+printf "\nSUCCESS!\n"
+#rm -rf $D
