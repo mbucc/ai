@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
       readbuffersize=4096, // default read buffer size
       testflag=0, // default test off
       suppressflag=0, // default output stuff
-      debugflag=0; // default debug off
+      debugflag=1; // default debug off
  
   // ok now, we gotta sorta outa the clps
   strcpy(log_filename,"");
