@@ -11,6 +11,9 @@ touch.ai: ai.yml stoplist.${E} stopfiles.${E} syslog-ng.conf.${E} ai.sh
 	${ANSIBLE} ai.yml
 	touch touch.ai
 
+test: retail test_retail.sh
+	./test_retail.sh
+
 lint:
 	# +skip-sys-headers, as splint cannot parse _types.h:
         #

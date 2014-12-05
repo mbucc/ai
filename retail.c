@@ -71,7 +71,8 @@ int main(int argc, char *argv[])
   int status = 1; // Set status flag to error
   char offset_filename[MAX], log_filename[MAX], oldlog_dir[MAX], oldlog_pat[MAX], tempstr[MAX];
   char* tempstr_ptr;
-  int i, my_switch, checkflag,
+  char  ch;
+  int i, checkflag,
       readbuffersize=4096, // default read buffer size
       testflag=0, // default test off
       suppressflag=0, // default output stuff
@@ -94,15 +95,15 @@ int main(int argc, char *argv[])
       checkflag = 0;
       strcpy(tempstr,"");
       strcat(tempstr,argv[i]);
-      if ((tempstr[0] == 45) && (strlen(argv[i]) == 2)) {
-        my_switch=tempstr[1];
+      if ((tempstr[0] == '-') && (strlen(argv[i]) == 2)) {
+        ch = tempstr[1];
 
-        switch (my_switch) {
+        switch (ch) {
         case 98: // and how about one of these -b ? remember to shove debug stuff out
                    debugflag = 1;
                    checkflag = 1;
                    break;
-        case 100: // also looking fora -d ? if so set log dir to use
+        case 'd': // Set log dir to use.
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 118 - Log directory name %s is too long.\n",argv[i+1]);
@@ -114,7 +115,7 @@ int main(int argc, char *argv[])
                      }
                    }
                    break;
-        case 102: // and how about one of these -f ? if so set log pattern to use
+        case 'f': // Set log pattern to use
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 132 - Log pattern name %s is too long.\n",argv[i+1]);
@@ -126,10 +127,10 @@ int main(int argc, char *argv[])
                      }
                    }
                    break;
-        case 104: // do we have a -h, well then tellem what, how and exit.
+        case 'h': // Help.
                    usage(debugflag);
                    exit(EXIT_FAILURE);
-        case 108: // have a -l ? if so set log file to use
+        case 'l': // S log file to use
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 150 - Log filename %s is too long.\n",argv[i+1]);
@@ -141,7 +142,7 @@ int main(int argc, char *argv[])
                      }
                    }
                    break;
-        case 111: // what abouta -o ? if so set offset file to use
+        case 'o': // Set offset file to use.
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 164 - Offset filename %s is too long.\n",argv[i+1]);
@@ -153,7 +154,7 @@ int main(int argc, char *argv[])
                      }
                    }
                    break;
-        case 114: // and how about one of these -r ? if so set read buffer size
+        case 'r': // Set read buffer size.
                    if (argc-1 > i) {
                      readbuffersize=atoi(argv[i+1]);
                      if (( readbuffersize < 1 ) || ( readbuffersize > 1048576 )) {
@@ -164,11 +165,11 @@ int main(int argc, char *argv[])
                    checkflag = 1;
                    }
                    break;
-        case 115: // and how about one of these -s ? suppress output
+        case 's': // Suppress output.
                    suppressflag = 1;
                    checkflag = 1;
                    break;
-        case 116: // and how about one of these -t ? if remember we don't update the offset file
+        case 't':
                    testflag = 1;
                    checkflag = 1;
                    break;
@@ -229,8 +230,8 @@ int main(int argc, char *argv[])
 
   // Make sure the old log pattern is just a filename and no path
   i = strlen(oldlog_pat)+1;
-  while (( oldlog_pat[i-1] != 47 ) && ( i > 1 )) i--;
-  if (( oldlog_pat[i-1] != 47 ) && ( i == 1 )) i=i-1;
+  while (( oldlog_pat[i-1] != '/' ) && ( i > 1 )) i--;
+  if (( oldlog_pat[i-1] != '/' ) && ( i == 1 )) i=i-1;
   tempstr_ptr=right_string(oldlog_pat,strlen(oldlog_pat)-i);
   strcpy(oldlog_pat,tempstr_ptr);
 
@@ -284,8 +285,8 @@ char* dirname(char* path)
   int i;
 
   i = strlen(path)+1;
-  while (( path[i-1] != 47 ) && ( i > 1 )) { i--; }
-  if (( path[i-1] != 47 ) && ( i == 1 )) {
+  while (( path[i-1] != '/' ) && ( i > 1 )) { i--; }
+  if (( path[i-1] != '/' ) && ( i == 1 )) {
      path = ".";
      return path;
   }
@@ -299,8 +300,8 @@ char* nondirname(char* path)
   char* tempstr_ptr;
 
   i = strlen(path)+1;
-  while (( path[i-1] != 47 ) && ( i > 1 )) i--;
-  if (( path[i-1] != 47 ) && ( i == 1 )) i=i-1;
+  while (( path[i-1] != '/' ) && ( i > 1 )) i--;
+  if (( path[i-1] != '/' ) && ( i == 1 )) i=i-1;
   tempstr_ptr=right_string(path,strlen(path)-i);
   strcpy(path,tempstr_ptr);
   return path;
