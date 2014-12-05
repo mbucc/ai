@@ -58,12 +58,12 @@
 #define VERSION "4.0.0"
 
 // Prototypes for functions
-char* dirname(char* path);
-char* nondirname(char* path);
-int check_log(char* logname, char* offset_filename, char* oldlog_directory, char* oldlog_filename_pat, int testflag,int readbuffersize,int suppressflag, int debugflag);
-void usage(int debugflag);
-void short_usage(void);
-char* right_string(char* my_path_file,int start_pos);
+static char* dirname(char* path);
+static char* nondirname(char* path);
+static int check_log(char* logname, char* offset_filename, char* oldlog_directory, char* oldlog_filename_pat, int testflag,int readbuffersize,int suppressflag, int debugflag);
+static void usage(int debugflag);
+static void short_usage(void);
+static char* right_string(char* my_path_file,int start_pos);
 
 // It all starts here
 int main(int argc, char *argv[])
@@ -129,7 +129,6 @@ int main(int argc, char *argv[])
         case 104: // do we have a -h, well then tellem what, how and exit.
                    usage(debugflag);
                    exit(EXIT_FAILURE);
-                   break;
         case 108: // have a -l ? if so set log file to use
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
@@ -317,15 +316,14 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
   struct stat file_stat, file_stat_old;
 
   char old_logfile[MAX],      // Moved log file name
-       old_logpathfile[MAX],  // Moved log path/file name
-       my_tmp_str[MAX];
+       old_logpathfile[MAX];  // Moved log path/file name
 
   char* buffer;
 
   DIR *dp;
   struct dirent *ep;
 
-  fpos_t offset_position, offset_cur_posn;   // position in the file to offset
+  fpos_t offset_position;   // position in the file to offset
 
   long file_mod_time;
   int charsread=0;
