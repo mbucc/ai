@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
   // any clps, too few, too many, well get outta here
   if ((argc == 1) || (argc > 14)) {
     short_usage();
-    exit(EX_USAGE);
+    exit(EXIT_FAILURE);
   }
 
   if ((strcmp(argv[1], "-h") == 0) || (strcmp(argv[1], "-l") == 0) || (strcmp(argv[1], "-o") == 0) || (strcmp(argv[1], "-d") == 0) || (strcmp(argv[1], "-f") == 0) || (strcmp(argv[1], "-r") == 0) || (strcmp(argv[1], "-s") == 0) || (strcmp(argv[1], "-t") == 0) || (strcmp(argv[1], "-b") == 0)) {
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 118 - Log directory name %s is too long.\n",argv[i+1]);
-                       exit(EX_DATAERR);
+                       exit(EXIT_FAILURE);
                      } else {
                        strcpy(oldlog_dir,argv[i+1]);
                        i++;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 132 - Log pattern name %s is too long.\n",argv[i+1]);
-                       exit(EX_DATAERR);
+                       exit(EXIT_FAILURE);
                      } else {
                        strcpy(oldlog_pat,argv[i+1]);
                        i++;
@@ -128,13 +128,13 @@ int main(int argc, char *argv[])
                    break;
         case 104: // do we have a -h, well then tellem what, how and exit.
                    usage(debugflag);
-                   exit(EX_USAGE);
+                   exit(EXIT_FAILURE);
                    break;
         case 108: // have a -l ? if so set log file to use
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 150 - Log filename %s is too long.\n",argv[i+1]);
-                       exit(EX_DATAERR);
+                       exit(EXIT_FAILURE);
                      } else {
                        strcpy(log_filename,argv[i+1]);
                        i++;
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
                    if (argc-1 > i) {
                      if ((strlen(argv[i+1])) > MY_MAX_PATH - 8 ) {
                        fprintf(stderr,"ERROR 164 - Offset filename %s is too long.\n",argv[i+1]);
-                       exit(EX_DATAERR);
+                       exit(EXIT_FAILURE);
                      } else {
                        strcpy(offset_filename,argv[i+1]);
                        i++;
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
                      readbuffersize=atoi(argv[i+1]);
                      if (( readbuffersize < 1 ) || ( readbuffersize > 1048576 )) {
                        fprintf(stderr,"ERROR 170 - Read Buffer %s is too small or too large.\n",argv[i+1]);
-                       exit(EX_DATAERR);
+                       exit(EXIT_FAILURE);
                      }
                    i++;
                    checkflag = 1;
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
       // if the checkflag is still 0 - exit with error
       if ( checkflag == 0 ) {
         fprintf(stderr,"ERROR 181 - Input parameter error, %s.\n", argv[i]);
-        exit(EX_DATAERR);
+        exit(EXIT_FAILURE);
       }
     }
   } else {
@@ -186,18 +186,18 @@ int main(int argc, char *argv[])
       // only program name and log name supplied
       if ((strlen(argv[1])) > MY_MAX_PATH - 8) {
         fprintf(stderr,"ERROR 191 - Log filename %s is too long.\n",argv[1]);
-        exit(EX_DATAERR);
+        exit(EXIT_FAILURE);
       }else strcpy(log_filename,argv[1]);
     }
     if (argc == 3) {
       // program name, log name and offset name supplied
       if ((strlen(argv[1])) > MY_MAX_PATH - 8 ) {
         fprintf(stderr,"ERROR 202 - Log filename %s is too long.\n",argv[1]);
-        exit(EX_DATAERR);
+        exit(EXIT_FAILURE);
       }else strcpy(log_filename,argv[1]);
       if ((strlen(argv[2])) > MY_MAX_PATH - 8 ) {
         fprintf(stderr,"ERROR 209 - Offset filename %s is too long.\n",argv[2]);
-        exit(EX_DATAERR);
+        exit(EXIT_FAILURE);
       }else strcpy(offset_filename,argv[2]);
     }
   }
@@ -206,7 +206,7 @@ int main(int argc, char *argv[])
   if (strcmp(log_filename, "") == 0 ) {
     if ( debugflag != 0 ) fprintf(stderr,"Debug 200 - No log_filename provided.\n");
     short_usage();
-    exit(EX_DATAERR);
+    exit(EXIT_FAILURE);
   }
   if (strcmp(offset_filename, "") == 0 ) {
     strcpy(tempstr,log_filename);
@@ -247,15 +247,8 @@ int main(int argc, char *argv[])
 
   status=check_log(log_filename, offset_filename, oldlog_dir, oldlog_pat, testflag, readbuffersize, suppressflag, debugflag); // check the logs
 
-  if (status == 0) exit(EX_OK);
-  else if(status == 1) exit(EX_SOFTWARE);
-  else if(status == 2) exit(EX_NOINPUT);
-  else if(status == 3) exit(EX_DATAERR);
-  else if(status == 4) exit(EX_CANTCREAT);
-  else {
-    fprintf(stderr,"ERROR 280 - An unknown error has occurred\n\n");
-     exit(EX_SOFTWARE);
-  }
+  if (status == 0) exit(EXIT_SUCCESS);
+  else exit(EXIT_FAILURE);
 }
 
 // Called functions follow . . . 
@@ -354,12 +347,12 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
   // Open as a binary in case the user reads in non-text files
   if((input=fopen(logname, "rb")) == NULL) {
     fprintf(stderr,"ERROR 390 - File %s cannot be read.\n",logname);
-    exit(EX_OSFILE);
+    exit(EXIT_FAILURE);
   }
 
   if((stat(logname,&file_stat)) != 0) { // load struct
     fprintf(stderr,"ERROR 396 - Cannot get %s file size.\n",logname);
-    exit(EX_OSFILE);
+    exit(EXIT_FAILURE);
   }
 
   if ( debugflag != 0 ) {
@@ -371,7 +364,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
   if ((sizeof(fpos_t) == 4) || sizeof(file_stat.st_size) == 4) {
     if ((file_stat.st_size > 2147483646) || (file_stat.st_size < 0)) {
       fprintf(stderr,"ERROR 403 - log file, %s, is too large at %lld bytes.\n", logname, (long long) file_stat.st_size);
-      exit(EX_DATAERR);
+      exit(EXIT_FAILURE);
     }
   }
 
@@ -416,7 +409,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
 
         if((stat(old_logpathfile,&file_stat_old)) != 0) { // load struct
           fprintf(stderr,"ERROR 476 - Cannot get %s file size.\n",ep->d_name);
-          exit(EX_OSFILE);
+          exit(EXIT_FAILURE);
         }
         if ((strncmp(ep->d_name,oldlog_filename_pat,strlen(oldlog_filename_pat)) ==0) && (strlen(ep->d_name) > strlen(oldlog_filename_pat)) && (file_stat_old.st_mtime > file_mod_time)) {
           file_mod_time = file_stat_old.st_mtime;
@@ -425,7 +418,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
       }
     }else{
       fprintf(stderr,"ERROR 488 - Couldn't open the directory: %s\n",oldlog_directory);
-      exit(EX_OSFILE);
+      exit(EXIT_FAILURE);
     }
     (void) closedir (dp);
 
@@ -442,7 +435,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
       // open the found filename
       if((old_input=fopen(old_logpathfile, "rb")) == NULL) {
         fprintf(stderr,"ERROR 512 - File %s cannot be read.\n",old_logpathfile);
-        exit(EX_OSFILE);
+        exit(EXIT_FAILURE);
       }
 
       // print out the old log stuff
@@ -479,7 +472,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
         strcat(old_logpathfile, ep->d_name);
         if((stat(old_logpathfile,&file_stat_old)) != 0) { /* load struct */
           fprintf(stderr,"ERROR 557 - Cannot get file %s details.\n",old_logpathfile);
-          exit(EX_OSFILE);
+          exit(EXIT_FAILURE);
         }
         if (inode_buffer == file_stat_old.st_ino) {
           if ( debugflag != 0 ) fprintf(stderr,"Debug 563 - Log file found!, Log is: %s\n",ep->d_name);
@@ -489,7 +482,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
       (void) closedir (dp);
     }else{
       fprintf(stderr,"ERROR 570 - Couldn't open the directory: %s",oldlog_directory);
-      exit(EX_OSFILE);
+      exit(EXIT_FAILURE);
     }
 
     // if we found a file, then deal with it, or bypass
@@ -503,7 +496,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
       // open the found filename
       if((old_input=fopen(old_logpathfile, "rb")) == NULL) {
         fprintf(stderr,"ERROR 589 - File %s cannot be read.\n",old_logpathfile);
-        exit(EX_OSFILE);
+        exit(EXIT_FAILURE);
       }
 
       // print out the old log stuff
@@ -541,11 +534,11 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
   if ( testflag == 0 ) {
     if((offset_output=fopen(offset_filename, "w")) == NULL) {
       fprintf(stderr,"ERROR 720 - File %s cannot be created. Check your permissions.\n",offset_filename);
-      exit(EX_NOPERM);
+      exit(EXIT_FAILURE);
     }else{
       if ((chmod(offset_filename,00660)) != 0) { // Don't let anyone read offset
         fprintf(stderr,"ERROR 725 - Cannot set permissions on file %s\n",offset_filename);
-        exit(EX_NOPERM);
+        exit(EXIT_FAILURE);
       }else{
         // write it
         fwrite(&file_stat.st_ino,sizeof(file_stat.st_ino),1,offset_output);
