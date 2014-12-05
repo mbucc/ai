@@ -270,7 +270,7 @@ char* right_string(char* my_path_file,int start_pos) {
       counter++;
     while (start_pos-- >=0 && counter-- >=0) 
       my_path_file--;
-    if (*my_path_file) { // don't copy an empty string
+    if (*my_path_file) {
       while (*my_path_file)
       *tempstr++=*my_path_file++;
     }
@@ -373,10 +373,12 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
     fread(&inode_buffer,sizeof(inode_buffer),1,offset_output);
     fread(&offset_position,sizeof(offset_position),1,offset_output);
     fread(&filesize_buffer,sizeof(filesize_buffer),1,offset_output);
-    fclose(offset_output); // We're done, clean up
-  }else{ // can't read the file? then assume no offset file exists
+    /* We're done, clean up */
+    fclose(offset_output);
+  /* can't read the file? then assume no offset file exists */
+  }else{
     fgetpos (input,&offset_position);
-      // set the old inode number to the current file
+       /* set the old inode number to the current file */
       inode_buffer=file_stat.st_ino;
     if (debugflag != 0) fprintf(stderr,"ERROR 425 - Assumed no offset file exists!\n");
   }
@@ -535,7 +537,8 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
       fprintf(stderr,"ERROR 720 - File %s cannot be created. Check your permissions.\n",offset_filename);
       exit(EXIT_FAILURE);
     }else{
-      if ((chmod(offset_filename,00660)) != 0) { // Don't let anyone read offset
+      /* Don't let anyone read offset */
+      if ((chmod(offset_filename,00660)) != 0) {
         fprintf(stderr,"ERROR 725 - Cannot set permissions on file %s\n",offset_filename);
         exit(EXIT_FAILURE);
       }else{
