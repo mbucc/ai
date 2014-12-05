@@ -1,5 +1,5 @@
 # !/bin/sh -e
-# Test logtail does what it should.
+# Test retail does what it should.
 # Since: Wed Dec  3 16:55:07 EST 2014
 #
 #    Copyright (c) 2014, Mark Bucciarelli <mkbucc@gmail.com>
@@ -20,7 +20,7 @@
 #
 
 
-LOGTAIL=./logtail
+LOGTAIL=./retail
 D=./testing
 
 rm -rf $D
@@ -31,7 +31,7 @@ fail() {
 	exit 1
 }
 
-# logtail outputs two lines added since last run.
+# retail outputs two lines added since last run.
 cat > $D/1.log << EOF
 line1
 line2
@@ -49,7 +49,7 @@ line5
 EOF
 diff $D/1.act $D/1.exp && printf "." || fail "didn't see two new lines"
 
-# logtail uses offset.<logfile> as default offset filename
+# retail uses offset.<logfile> as default offset filename
 cat > $D/2.log << EOF
 line1
 line2
