@@ -3,7 +3,7 @@ E=tinyvz
 
 
 logtail: logtail-v3.21.c
-	gcc -D_OS_UNIX -o $@ $?
+	gcc -o $@ $?
 
 all: touch.ai logtail
 

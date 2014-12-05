@@ -26,10 +26,8 @@
 * This program has no warranty of any kind.                                        *
 *                                                                                  *
 * To compile:                                                                      *
-* Unix: gcc -D_OS_UNIX -o logtail logtail.c                                        *
-* Windows: gcc -D_OS_DOS -o logtail logtail.c                                      *
+* Unix: gcc -o logtail logtail.c                                                   *
 * add -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 for large file aware build        *
-*  I used mingw64 to compile the windows version.                                  *
 *                                                                                  *
 *  VERSION 2.0 : Log roll aware                                                    *
 *  VERSION 2.1 : Fixes and Windows compatibility                                   *
@@ -41,6 +39,7 @@
 *                fgets,fprintf to fread,fwrite added -b -r -s options              *
 *                fixed win extra line feed out bug                                 *
 *  VERSION 3.21 : usage function, 32/64 bit aware, added debug, changed the logic. *
+*  VERSION 4.0.0  Remove _OS_DOS support.                                          *
 *----------------------------------------------------------------------------------*/
 
 #include <stdio.h>
@@ -53,16 +52,10 @@
 #include <sysexits.h>
 
 
-#ifdef _OS_DOS
-  #include <fcntl.h>
-  #define PRIdS "Id"
-#else
-  #define PRIdS "zd"
-#endif
 
 #define MAX 2048
 #define MY_MAX_PATH 2048
-#define VERSION "3.21"
+#define VERSION "4.0.0"
 
 // Prototypes for functions
 char* dirname(char* path);
@@ -75,9 +68,6 @@ char* right_string(char* my_path_file,int start_pos);
 // It all starts here
 int main(int argc, char *argv[])
 {
-  #ifdef _OS_DOS
-    _setmode(1,_O_BINARY);
-  #endif
   int status = 1; // Set status flag to error
   char offset_filename[MAX], log_filename[MAX], oldlog_dir[MAX], oldlog_pat[MAX], tempstr[MAX];
   char* tempstr_ptr;
@@ -222,12 +212,7 @@ int main(int argc, char *argv[])
     strcpy(tempstr,log_filename);
     strcpy(offset_filename,dirname(tempstr));
     strcpy(tempstr,log_filename);
-    #ifdef _OS_UNIX
-      strcat(offset_filename,"/offset.");
-    #endif
-    #ifdef _OS_DOS
-      strcat(offset_filename,"\\offset.");
-    #endif
+    strcat(offset_filename,"/offset.");
     strcat(offset_filename,nondirname(tempstr));
   }
 
@@ -255,7 +240,7 @@ int main(int argc, char *argv[])
   fprintf(stderr,"Debug 260 - offset_filename: %s\n",offset_filename);
   fprintf(stderr,"Debug 261 - oldlog_dir: %s\n",oldlog_dir);
   fprintf(stderr,"Debug 262 - oldlog_pat: %s\n",oldlog_pat);
-  fprintf(stderr,"Debug 263 - Read buffer size: %" PRIdS "\n",readbuffersize);
+  fprintf(stderr,"Debug 263 - Read buffer size: %zd\n",readbuffersize);
   if ( suppressflag != 0 ) fprintf(stderr,"Debug 264 - No log output\n");
   if ( testflag != 0 ) fprintf(stderr,"Debug 265 - No offset_file update\n");
   }
@@ -307,14 +292,8 @@ char* dirname(char* path)
   int i;
 
   i = strlen(path)+1;
-  #ifdef _OS_UNIX
-    while (( path[i-1] != 47 ) && ( i > 1 )) { i--; }
-    if (( path[i-1] != 47 ) && ( i == 1 )) {
-  #endif
-  #ifdef _OS_DOS
-    while (( path[i-1] != 92 ) && ( i > 1 )) { i--; }
-    if (( path[i-1] != 92 ) && ( i == 1 )) {
-  #endif
+  while (( path[i-1] != 47 ) && ( i > 1 )) { i--; }
+  if (( path[i-1] != 47 ) && ( i == 1 )) {
      path = ".";
      return path;
   }
@@ -328,14 +307,8 @@ char* nondirname(char* path)
   char* tempstr_ptr;
 
   i = strlen(path)+1;
-  #ifdef _OS_UNIX
-    while (( path[i-1] != 47 ) && ( i > 1 )) i--;
-    if (( path[i-1] != 47 ) && ( i == 1 )) i=i-1;
-  #endif
-  #ifdef _OS_DOS
-    while (( path[i-1] != 92 ) && ( i > 1 )) i--;
-    if (( path[i-1] != 92 ) && ( i == 1 )) i=i-1;
-  #endif
+  while (( path[i-1] != 47 ) && ( i > 1 )) i--;
+  if (( path[i-1] != 47 ) && ( i == 1 )) i=i-1;
   tempstr_ptr=right_string(path,strlen(path)-i);
   strcpy(path,tempstr_ptr);
   return path;
@@ -390,11 +363,9 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
   }
 
   if ( debugflag != 0 ) {
-    #ifdef _OS_UNIX
-      fprintf(stderr,"Debug 390 - file_stat.st_ino size: %" PRIdS "\n",sizeof(file_stat.st_ino));
-    #endif
-    fprintf(stderr,"Debug 391 - file_stat.st_size size: %" PRIdS "\n",sizeof(file_stat.st_size));
-    fprintf(stderr,"Debug 392 - fpos_t size: %" PRIdS "\n",sizeof(fpos_t));
+      fprintf(stderr,"Debug 390 - file_stat.st_ino size: %zd\n",sizeof(file_stat.st_ino));
+    fprintf(stderr,"Debug 391 - file_stat.st_size size: %zd\n",sizeof(file_stat.st_size));
+    fprintf(stderr,"Debug 392 - fpos_t size: %zd\n",sizeof(fpos_t));
   }
   // 32 bits, exit if file too big
   if ((sizeof(fpos_t) == 4) || sizeof(file_stat.st_size) == 4) {
@@ -407,18 +378,14 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
   // see if we can open an existing offset file and read in the inode (unix),
   // offset and filesize
   if((offset_output=fopen(offset_filename, "rb")) != NULL) {
-    #ifdef _OS_UNIX
-      fread(&inode_buffer,sizeof(inode_buffer),1,offset_output);
-    #endif
+    fread(&inode_buffer,sizeof(inode_buffer),1,offset_output);
     fread(&offset_position,sizeof(offset_position),1,offset_output);
     fread(&filesize_buffer,sizeof(filesize_buffer),1,offset_output);
     fclose(offset_output); // We're done, clean up
   }else{ // can't read the file? then assume no offset file exists
     fgetpos (input,&offset_position);
-    #ifdef _OS_UNIX
       // set the old inode number to the current file
       inode_buffer=file_stat.st_ino;
-    #endif
     if (debugflag != 0) fprintf(stderr,"ERROR 425 - Assumed no offset file exists!\n");
   }
 
@@ -428,7 +395,6 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
     if ( filesize_buffer == file_stat.st_size ) fprintf(stderr,"Debug 623 - same\n");
   }
 
-  #ifdef _OS_UNIX
   // if the current file inode is the same, but the file size has
   // grown SMALLER than the last time we checked, then assume
   // log has been rolled via a copy and delete.
@@ -555,75 +521,6 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
     // set the offset back to zero and off we go looking at the current file
     fgetpos(input,&offset_position);
   }
-  #endif
-
-  #ifdef _OS_DOS
-    // if the current file has grown SMALLER than the last time we checked,
-    // then assume the log has been rolled via a copy and delete.
-    // Look for the old file to output any extra,
-
-  if ( filesize_buffer > file_stat.st_size ) {
-    if ( debugflag != 0 ) fprintf(stderr,"Debug 621 - Log file has copied/smaller!, Log dir is: %s\n",oldlog_directory);
-    // look in the log file directory for the most recent old_log_filename_pat<extn>
-    strcpy(old_logfile,"NoFileFound");
-    dp = opendir(oldlog_directory);
-    if (dp != NULL) {
-      file_mod_time = 0;
-      while (ep = readdir (dp))
-      if (strcmp(ep->d_name,".") != 0 && strcmp(ep->d_name,"..") != 0) {
-        // put the directory and the filename back together
-        strcpy(old_logpathfile, oldlog_directory);
-        strcat(old_logpathfile, "\\");
-        strcat(old_logpathfile, ep->d_name);
-
-        if((stat(old_logpathfile,&file_stat_old)) != 0) { // load struct
-          fprintf(stderr,"ERROR 640 - Cannot get %s file size.\n",ep->d_name);
-          exit(3);
-        }
-        if ((strncmp(ep->d_name,oldlog_filename_pat,strlen(oldlog_filename_pat)) ==0) && (strlen(ep->d_name) > strlen(oldlog_filename_pat)) && (file_stat_old.st_mtime > file_mod_time)) {
-          file_mod_time = file_stat_old.st_mtime;
-          strcpy(old_logfile,ep->d_name);
-        }
-      }
-    }else{
-      fprintf(stderr,"ERROR 652 - Couldn't open the directory: %s\n",oldlog_directory);
-      exit(3);
-    }
-    (void) closedir (dp);
-
-    if ( debugflag != 0 ) fprintf(stderr,"Debug 658 - Old log file found: %s\n",old_logfile);
-
-    // if we found a file, then deal with it, or bypass
-    if (strcmp(old_logfile,"NoFileFound") != 0 ) {
-      // put the directory and old filename back together
-      strcpy(old_logpathfile, oldlog_directory);
-      strcat(old_logpathfile, "/");
-      strcat(old_logpathfile, old_logfile);
-      if ( debugflag != 0 ) fprintf(stderr,"Debug 670 - Copied file is here: %s\n", old_logpathfile);
-
-      // open the found filename
-      if((old_input=fopen(old_logpathfile, "rb")) == NULL) {
-        fprintf(stderr,"ERROR 676 - File %s cannot be read.\n",old_logpathfile);
-        exit(2);
-      }
-
-      // print out the old log stuff
-      fsetpos(old_input,&offset_position);
-
-      // Print the file
-      do {
-        buffer[0]=0;
-        charsread = fread (buffer,1,readbuffersize,old_input);
-        if ( suppressflag == 0 ) fwrite (buffer,1,charsread,stdout);
-      } while (charsread == readbuffersize);
-      printf("\n");
-      fclose(old_input); // clean up
-    }
-    // set the offset back to zero and off we go looking at the current file
-    // reset offset and report everything
-    fgetpos(input,&offset_position);
-  }
-  #endif
 
   // print out the current log stuff
   if ( debugflag != 0 ) fprintf(stderr,"Debug 695 - print out the current log stuff: %s\n",logname);
@@ -651,9 +548,7 @@ int check_log(char* logname, char* offset_filename, char* oldlog_directory, char
         exit(EX_NOPERM);
       }else{
         // write it
-        #ifdef _OS_UNIX
-          fwrite(&file_stat.st_ino,sizeof(file_stat.st_ino),1,offset_output);
-        #endif
+        fwrite(&file_stat.st_ino,sizeof(file_stat.st_ino),1,offset_output);
         fwrite(&offset_position,sizeof(offset_position),1,offset_output);
         fwrite(&file_stat.st_size,sizeof(file_stat.st_size),1,offset_output);
         fclose(offset_output);
@@ -702,29 +597,17 @@ printf("\nto stderr. The -r option specifies the log file read buffer, in bytes,
 printf("\nvariation may improve performance.");
 printf("\nRotated log files will be automatically accounted for by looking at the");
 printf("\nlog and,");
-#ifdef _OS_UNIX
   printf(" if the inode has changed, looking for the old log with the");
   printf("\noriginal inode number in the <rolled_log_directory>. If the inode hasn't");
   printf("\nhasn't changed, and log is now smaller, looking for the old log, the most");
   printf("\nrecent file starting with same filename as [log_file].");
-#endif
-#ifdef _OS_DOS
- printf(" if the log is now smaller, looking for the rolled log in the");
- printf("\n<rolled_log_directory>, the most recent file starting with same filename");
- printf("\nas [log_file].");
-#endif
 printf("\n\nVersion: %s",VERSION);
-#ifdef _OS_UNIX
   printf("\nComplied for *nix");
-#endif
-#ifdef _OS_DOS
- printf("\nComplied for DOS");
-#endif
 
 if ((sizeof(test_stat.st_size) < 8) || (sizeof(fpos_t) < 8)) printf("\nComplied with 32bit file pointers, warning: 2G file size limit.");
 if ((sizeof(test_stat.st_size) >= 8) && (sizeof(fpos_t) >= 8)) printf("\nComplied with 64bit file pointers, large file aware.");
-if ( debugflag != 0 ) printf("\nSize of test_stat.st_size = %" PRIdS " bytes",sizeof(test_stat.st_size));
-if ( debugflag != 0 ) printf("\nSize of fpos_t = %" PRIdS " bytes",sizeof(fpos_t));
+if ( debugflag != 0 ) printf("\nSize of test_stat.st_size = %zd bytes",sizeof(test_stat.st_size));
+if ( debugflag != 0 ) printf("\nSize of fpos_t = %zd bytes",sizeof(fpos_t));
 if ( debugflag != 0 ) printf("\nCompiled with DEBUG on");
 
 printf("\n\nWritten by Ross Moffatt <ross.stuff@telstra.com>");
@@ -737,9 +620,7 @@ printf("\nThis program is covered by the GNU license.");
 printf("\n\n This program covered by the GNU License. This program is free to");
 printf("\n use as long as the above copyright notices are left intact. This");
 printf("\n program has no warranty of any kind.\n");
-#ifdef _OS_UNIX
   printf("\n");
-#endif
 }
 
 void short_usage(void)
@@ -748,9 +629,7 @@ printf("\n  Usage: logtail [log_file] <offset_file>");
 printf("\n     or: logtail [-l log_file] <-o offset_file> <-d rolled_log_directory>");
 printf("\n       : <-f rolled_log_filename> <-r> <-s> <-t> <-b>");
 printf("\n     or: logtail -h\n");
-#ifdef _OS_UNIX
   printf("\n");
-#endif
 }
 
 /* ------------------------------------------------------------------*/
