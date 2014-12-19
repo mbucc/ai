@@ -9,20 +9,32 @@
 
 HOST=vps44276563
 LOGDIR=/var/log
+RETAIL_DATA=$HOME/retail
 
-# HTML mail looks sooo much better on my phone.
-OUTFN=/tmp/$(basename $0)-mail.$$.tmp
+mkdir -p ${RETAIL_DATA}
 
-# So we can put comments in the stop lists
+#
+# Remove comments from stop files.
+#
 TMP1=/tmp/$(basename $0)-files.$$.tmp
 TMP2=/tmp/$(basename $0)-rules.$$.tmp
 grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stopfiles > $TMP1
 grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stoplist > $TMP2
 
-
+#
+# LOGNAME is more universal than USERNAME.
+#
 [ "x$MAILTO" != "x" ] && TO=$MAILTO || TO=$LOGNAME
 
+#
+# Write out HTML email.
+#
+# Whether or not we actually send an eamil
+# depends on if we get any hits when grepping logs.
+#
 # doctype and xmlns guidance from http://htmlemailboilerplate.com/.
+#
+OUTFN=/tmp/$(basename $0)-mail.$$.tmp
 
 cat > $OUTFN << EOF
 To: $TO
@@ -45,14 +57,16 @@ EOF
 # So use line count change to figure out
 # if we need to send email.
 N0=$(cat $OUTFN | wc -l)
+TMPFN=/tmp/ai.tmp
 find $LOGDIR -type f | grep -v -f $TMP1 |  while read fn; do
-    if grep -v -f $TMP2 $fn > /dev/null ; then
+    retail -o ${RETAIL_DATA} $fn > $TMPFN
+    if grep -v -f $TMP2 $TMPFN > /dev/null ; then
         echo "<h2>$fn</h2>" >> $OUTFN
 
 	# Add paragraph breaks
 	# so when the phone wraps log lines
 	# it is easy to tell them apart.
-	grep -n -v -f $TMP2 $fn |sed 's/^/<p>/' >> $OUTFN
+	grep -n -v -f $TMP2 $TMPFN |sed 's/^/<p>/' >> $OUTFN
 
     fi
 done
