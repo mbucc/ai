@@ -8,6 +8,7 @@
 #
 
 HOST=vps44276563
+LOGDIR=/var/log
 
 # HTML mail looks sooo much better on my phone.
 OUTFN=/tmp/$(basename $0)-mail.$$.tmp
@@ -25,7 +26,7 @@ grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stoplist > $TMP2
 
 cat > $OUTFN << EOF
 To: $TO
-Subject: Log Bot yammered on $(date +%F)
+Subject: Hey, logbot noticed something.
 Content-Type: text/html
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -44,7 +45,7 @@ EOF
 # So use line count change to figure out
 # if we need to send email.
 N0=$(cat $OUTFN | wc -l)
-find /var/log -type f | grep -v -f $TMP1 |  while read fn; do
+find $LOGDIR -type f | grep -v -f $TMP1 |  while read fn; do
     if grep -v -f $TMP2 $fn > /dev/null ; then
         echo "<h2>$fn</h2>" >> $OUTFN
 
