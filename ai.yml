@@ -12,6 +12,7 @@
   #---------------------------------------------------------------------------
 
   - file:  path=/root/bin         state=directory           group=root  owner=root  mode=755
+  - file:  path=/root/retail      state=directory           group=root  owner=root  mode=700
   - copy:  src=stoplist.{{env}}   dest=/root/bin/stoplist   owner=root  group=root  mode=644
   - copy:  src=stopfiles.{{env}}  dest=/root/bin/stopfiles  owner=root  group=root  mode=644
   - copy:  src=ai.sh              dest=/root/bin/ai.sh      owner=root  group=root  mode=755
