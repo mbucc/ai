@@ -9,7 +9,7 @@
 
 HOST=vps44276563
 LOGDIR=/var/log
-RETAIL_DATA=$HOME/retail
+RETAIL_DATA=$HOME/offsets
 
 mkdir -p ${RETAIL_DATA}
 
@@ -38,7 +38,7 @@ OUTFN=/tmp/$(basename $0)-mail.$$.tmp
 
 cat > $OUTFN << EOF
 To: $TO
-Subject: Hey, logbot noticed something.
+Subject: logbot hit
 Content-Type: text/html
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -59,7 +59,7 @@ EOF
 N0=$(cat $OUTFN | wc -l)
 TMPFN=/tmp/ai.tmp
 find $LOGDIR -type f | grep -v -f $TMP1 |  while read fn; do
-    retail -o ${RETAIL_DATA} $fn > $TMPFN
+    retail -o ${RETAIL_DATA}/ $fn > $TMPFN
     if grep -v -f $TMP2 $TMPFN > /dev/null ; then
         echo "<h2>$fn</h2>" >> $OUTFN
 
