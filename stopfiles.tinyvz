@@ -5,12 +5,6 @@
 \.gz$
 \.[01]$
 
-# Apt logs lines like 'Start-Date:  2014-11-19  00:47:22'.
-# Instead of using really broad regexp 
-# that risks stomping lines in other logs we want, 
-# just ignore them.
-apt/term.log
-apt/history.log
 
 # Ignore binary logs
 wtmp

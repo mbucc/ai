@@ -19,8 +19,8 @@ mkdir -p ${RETAIL_DATA}
 #
 TMP1=/tmp/$(basename $0)-files.$$.tmp
 TMP2=/tmp/$(basename $0)-rules.$$.tmp
-grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stopfiles > $TMP1
-grep -v '\(^#\|^[:blank:]*$\)' /root/bin/stoplist > $TMP2
+grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stopfiles > $TMP1
+grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stoplist > $TMP2
 
 #
 # LOGNAME is more universal than USERNAME.
@@ -59,7 +59,7 @@ EOF
 # if we need to send email.
 N0=$(cat $OUTFN | wc -l)
 TMPFN=/tmp/ai.tmp
-find $LOGDIR -type f | grep -v -f $TMP1 |  while read fn; do
+find $LOGDIR -type f -group adm | grep -v -f $TMP1 | while read fn; do
     $RETAIL -o ${RETAIL_DATA}/ $fn > $TMPFN
     if grep -v -f $TMP2 $TMPFN > /dev/null ; then
         echo "<h2>$fn</h2>" >> $OUTFN

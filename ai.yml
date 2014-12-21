@@ -1,9 +1,23 @@
 - hosts: www
   vars:
     env: tinyvz
+    usr: logbot
   sudo: yes
 
   tasks:
+
+  #---------------------------------------------------------------------------
+  #
+  #                                U S E R
+  #
+  # By default, Ubuntu Lucid only lets the adm group read the logs and
+  # /dev/xconsole.  Perfect for what the ai logbot does.
+  #
+  #---------------------------------------------------------------------------
+
+  - user:  name={{usr}}                group=adm        createhome=yes
+  - file:  path=/home/{{usr}}/offsets  state=directory  group=adm       owner=logbot  mode=750
+  - file:  path=/home/{{usr}}/bin      state=directory  group=adm       owner=logbot  mode=755
 
   #---------------------------------------------------------------------------
   #
@@ -11,22 +25,15 @@
   #
   #---------------------------------------------------------------------------
 
-  - file:  path=/root/bin         state=directory           group=root  owner=root  mode=755
-  - file:  path=/root/retail      state=directory           group=root  owner=root  mode=700
-  - copy:  src=stoplist.{{env}}   dest=/root/bin/stoplist   owner=root  group=root  mode=644
-  - copy:  src=stopfiles.{{env}}  dest=/root/bin/stopfiles  owner=root  group=root  mode=644
-  - copy:  src=ai.sh              dest=/root/bin/ai.sh      owner=root  group=root  mode=755
+  - copy:  src=stoplist.{{env}}   dest=/home/{{usr}}/bin/stoplist   owner=logbot  group=adm  mode=644
+  - copy:  src=stopfiles.{{env}}  dest=/home/{{usr}}/bin/stopfiles  owner=logbot  group=adm  mode=644
+  - copy:  src=ai.sh              dest=/home/{{usr}}/bin/ai.sh      owner=logbot  group=adm  mode=755
 
 
   #---------------------------------------------------------------------------
   #
   #                           P U T   I N   C R O N
   #
-  # Run before logrotate:
-  #
-  #      # grep cron.daily /etc/crontab
-  #      45 5 * * * root test -x /usr/sbin/anacron || ( cd / && run-parts --report /etc/cron.daily )
-  #
   #---------------------------------------------------------------------------
 
-  - cron: user=root name="Artificial Ignorance" minute="0" job="/root/bin/ai.sh"
+  - cron: user=logbot name="Artificial Ignorance" minute="0" job="/home/{{usr}}/bin/ai.sh"
