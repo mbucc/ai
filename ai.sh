@@ -67,7 +67,11 @@ find $LOGDIR -type f -group adm | grep -v -f $TMP1 | while read fn; do
 	# Add paragraph breaks
 	# so when the phone wraps log lines
 	# it is easy to tell them apart.
-	grep -n -v -f $TMP2 $TMPFN |sed 's/^/<p>/' >> $OUTFN
+	grep -n -v -f $TMP2 $TMPFN \
+	| sed 's/</\&lt;/g' \
+	| sed 's/>/\&gt;/g' \
+        | sed 's/^/<p>/' \
+	>> $OUTFN
 
     fi
 done
