@@ -1,5 +1,5 @@
-# Just look at logs since yesterday.  
-# As long as logs are rotated daily, 
+# Just look at logs since yesterday.
+# As long as logs are rotated daily,
 # and we run this script daily
 # this will work fine.
 \.gz$

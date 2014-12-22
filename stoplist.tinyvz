@@ -76,3 +76,19 @@ update-alternatives: link
 
 # syslog-ng
 syslog-ng.*: Configuration reload request received, reloading configuration;
+
+# tmUnblock.cgi is a binary CGI executable in some Cisco/Linksys router
+# tthat has multiple security holes that permit various attacks on the router.
+GET /tmUnblock.cgi
+
+# Someone made an empty request to nginx.
+# That is, then connected on port 80 but then sent nothing.
+# Googling suggest that some of this may be due to use of Chrome browser;
+# for example, from http://it.randomthemes.com/2012/08/24/153/:
+#       modern browsers open 2+ simultanious connections,
+#       but some of them frequently not used for data
+#       transfer, so nginx close them by timeout with
+#       400 code at access.log
+#
+] "-" 400 0 "-" "-"
+
