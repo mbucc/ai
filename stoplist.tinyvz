@@ -136,3 +136,7 @@ GET /surf.jpg HTTP/1.[01]" \(304\|200\)
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
+
+# Before ignoring next one (which I've seen), 
+# read http://serverfault.com/questions/322415/securing-nginx-proxy
+# client timed out (110: Connection timed out) while reading client request headers
