@@ -7,10 +7,10 @@ CRON.*: session closed for user root
 CRON.*: session opened for user root
 CRON.*: session closed for user logbot
 CRON.*: session opened for user logbot
-CRON.*: (root) CMD (.* run-parts --report /etc/cron.hourly)
-CRON.*: (root) CMD (.* run-parts --report /etc/cron.daily)
-CRON.*: (root) CMD (.* run-parts --report /etc/cron.weekly)
-CRON.*: (root) CMD (.* run-parts --report /etc/cron.monthly)
+CRON.*: (root) CMD (.* run-parts --report /etc/cron.hourly
+CRON.*: (root) CMD (.* run-parts --report /etc/cron.daily
+CRON.*: (root) CMD (.* run-parts --report /etc/cron.weekly
+CRON.*: (root) CMD (.* run-parts --report /etc/cron.monthly
 CRON.*: (logbot) CMD (/home/logbot/bin/ai.sh)
 
 # Not sure why this comes out lower case sometimes.
@@ -79,17 +79,60 @@ update-alternatives: link
 syslog-ng.*: Configuration reload request received, reloading configuration;
 
 # tmUnblock.cgi is a binary CGI executable in some Cisco/Linksys router
-# tthat has multiple security holes that permit various attacks on the router.
-GET /tmUnblock.cgi
+# that has multiple security holes that permit various attacks on the router.
+GET /tmUnblock.cgi" 404
 
 # Someone made an empty request to nginx.
-# That is, then connected on port 80 but then sent nothing.
-# Googling suggest that some of this may be due to use of Chrome browser;
-# for example, from http://it.randomthemes.com/2012/08/24/153/:
+# Both Chrome and Firefox open more than two
+# simultaneous connections to a web site.
+# If one of the connections is not needed to pull data,
+# then you get 400 in access_log
+# and "closed prematurely" in error_log.
+#
+# From http://it.randomthemes.com/2012/08/24/153/:
+#
 #       modern browsers open 2+ simultanious connections,
 #       but some of them frequently not used for data
 #       transfer, so nginx close them by timeout with
 #       400 code at access.log
 #
-] "-" 400 0 "-" "-"
+ "-" 400 0 "-" "-"
+ "-" 400 "-" "-"
+client closed prematurely connection while reading client request line
 
+# XXX: use regex instead?  Watch for a while ...
+#GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}.php HTTP/1.1" 404
+GET /anan/ana/an.php HTTP/1.1" 404
+GET /czcz/czc/cz.php HTTP/1.1" 404
+GET /gaga/gag/ga.php HTTP/1.1" 404
+GET /hjhj/hjh/hj.php HTTP/1.1" 404
+GET /ococ/oco/oc.php HTTP/1.1" 404
+GET /oyoy/oyo/oy.php HTTP/1.1" 404
+
+# Someone testing if redirects are allowed.
+GET http://www.ly.com/ HTTP/1.1" 200
+
+# Exploit attempts.
+GET /actionnews/index/ HTTP/1.1" 404
+GET /blog HTTP/1.1" 404
+GET /drupal HTTP/1.1" 404
+GET /favicon.ico HTTP/1.1" 404
+GET /joomla HTTP/1.1" 404
+GET /myadmin/scripts/setup.php HTTP/1.1" 404
+GET /phpMyAdmin/scripts/setup.php HTTP/1.1" 404
+GET /pma/scripts/setup.php HTTP/1.1" 404
+GET /robots.txt HTTP/1.1" 404
+GET /user/soapCaller.bs HTTP/1.1" 404
+GET /wordpress HTTP/1.1" 404
+GET /wp HTTP/1.1" 404
+
+# The normal website pages.
+GET / HTTP/1.[01]" \(304\|200\)
+GET /reset.css HTTP/1.[01]" \(304\|200\)
+GET /style.css HTTP/1.[01]" \(304\|200\)
+GET /forms.css HTTP/1.[01]" \(304\|200\)
+GET /rhythm.css HTTP/1.[01]" \(304\|200\)
+GET /surf.jpg HTTP/1.[01]" \(304\|200\)
+
+# error_log - normal behavior.
+client [0-9.]\+ closed keepalive connection
