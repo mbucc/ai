@@ -1,0 +1,27 @@
+#! /bin/sh
+# Test stop list against a log file.
+# Since : Sun Jan  4 13:29:46 UTC 2015
+# Author: mkbucc@gmailcom
+#
+
+USAGE="Usage: $(basename $0) <stoplist> <logfile>"
+if [ "x$1" = "x" ]; then
+	echo $USAGE 1>&2
+	exit 1
+fi
+STOPLIST=$1
+if [ "x$2" = "x" ]; then
+	echo $USAGE 1>&2
+	exit 1
+fi
+LOG=$2
+
+#
+# Remove comments.
+#
+TMP=/tmp/$(basename $0)-rules.$$.tmp
+grep -v '\(^#\|^[:blank:]*$\)' $STOPLIST > $TMP
+
+grep -n -v -f $TMP $LOG
+
+rm -f $TMP
