@@ -1,19 +1,12 @@
 Artificial Ignorance: log monitoring ala Marcus Ranum
 Since: Wed Nov 19 11:47:27 EST 2014
 
-	Get a daily email of log messages that you don't recognize
+	Get emails of log messages that you don't recognize
 	in log files that you don't ignore.
 
-	For simplicity, I rotate logs daily.  Since ai runs daily,
-	this avoids trying to figure out what log lines were added
-	since the last run.
+	The stoplist here is specific to my environment,
+	(Ubuntu Lucid) so you will need to create your own.
 
-	My environment is an Ubuntu in a tinyvz host, so the stoplists
-	are really short.
-
-	I am also just put it live, so I am probably ignoring far
-	too few log lines (for example, nginx!), while I get a feel
-	for how it works.
 
 Setup:
 
@@ -41,10 +34,10 @@ Setup:
 
 Todo:
 
-	- Store stoplist patterns as one file per daemon.  Then cat
+	[] Store stoplist patterns as one file per daemon.  Then cat
 	  together lists for daemons you care about to build stoplist.
 
-	- Implement the "retail" trick described below so we don't
+	[x] Implement the "retail" trick described below so we don't
 	  have to use the rotate daily hack and can still run from
 	  cron and works for all log files not excluded.
 
