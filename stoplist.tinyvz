@@ -80,7 +80,7 @@ syslog-ng.*: Configuration reload request received, reloading configuration;
 
 # tmUnblock.cgi is a binary CGI executable in some Cisco/Linksys router
 # that has multiple security holes that permit various attacks on the router.
-GET /tmUnblock.cgi" 404
+GET /tmUnblock\.cgi HTTP/1\.1" 400
 
 # Someone made an empty request to nginx.
 # Both Chrome and Firefox open more than two
