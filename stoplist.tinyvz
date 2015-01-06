@@ -101,15 +101,15 @@ GET /tmUnblock\.cgi HTTP/1\.1" 400
 client closed prematurely connection while reading client request line
 
 # 
-GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\.php HTTP/1\.1" 404
-#GET /anan/ana/an.php HTTP/1\.1" 404
-#GET /czcz/czc/cz.php HTTP/1\.1" 404
-#GET /gaga/gag/ga.php HTTP/1\.1" 404
-#GET /hjhj/hjh/hj.php HTTP/1\.1" 404
-#GET /lyly/lyl/ly.php HTTP/1\.1" 404
-#GET /ococ/oco/oc.php HTTP/1\.1" 404
-#GET /oyoy/oyo/oy.php HTTP/1\.1" 404
-#GET /vzvz/vzv/vz.php HTTP/1\.1" 404
+GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\\.php HTTP/1\.1" 404
+#GET /anan/ana/an\.php HTTP/1\.1" 404
+#GET /czcz/czc/cz\.php HTTP/1\.1" 404
+#GET /gaga/gag/ga\.php HTTP/1\.1" 404
+#GET /hjhj/hjh/hj\.php HTTP/1\.1" 404
+#GET /lyly/lyl/ly\.php HTTP/1\.1" 404
+#GET /ococ/oco/oc\.php HTTP/1\.1" 404
+#GET /oyoy/oyo/oy\.php HTTP/1\.1" 404
+#GET /vzvz/vzv/vz\.php HTTP/1\.1" 404
 
 # Someone testing if redirects are allowed.
 GET http://[^"]\+ HTTP/1\.1" \(404\|200\)
@@ -122,25 +122,25 @@ GET /drupal HTTP/1\.1" 404
 GET /favicon.ico HTTP/1\.1" 404
 GET /joomla HTTP/1\.1" 404
 GET /manager/html HTTP/1\.1" 404
-GET /myadmin/scripts/setup.php HTTP/1\.1" 404
-GET /phpMyAdmin/scripts/setup.php HTTP/1\.1" 404
-GET /pma/scripts/setup.php HTTP/1\.1" 404
-GET /robots.txt HTTP/1\.1" 404
-GET /user/soapCaller.bs HTTP/1\.1" 404
+GET /myadmin/scripts/setup\.php HTTP/1\.1" 404
+GET /phpMyAdmin/scripts/setup\.php HTTP/1\.1" 404
+GET /pma/scripts/setup\.php HTTP/1\.1" 404
+GET /robots\.txt HTTP/1\.1" 404
+GET /user/soapCaller\.bs HTTP/1\.1" 404
 GET /wordpress HTTP/1\.1" 404
 GET /wp HTTP/1\.1" 404
 POST /cgi-bin/php[^"]\+" 404
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
-GET /reset.css HTTP/1\.[01]" \(304\|200\)
-GET /style.css HTTP/1\.[01]" \(304\|200\)
-GET /forms.css HTTP/1\.[01]" \(304\|200\)
-GET /rhythm.css HTTP/1\.[01]" \(304\|200\)
-GET /surf.jpg HTTP/1\.[01]" \(304\|200\)
+GET /reset\.css HTTP/1\.[01]" \(304\|200\)
+GET /style\.css HTTP/1\.[01]" \(304\|200\)
+GET /forms\.css HTTP/1\.[01]" \(304\|200\)
+GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
+GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
 
 # Netcraft
-HEAD / HTTP/1.1" 200 .* Netcraft Web Server Survey
+HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
