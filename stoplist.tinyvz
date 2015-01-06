@@ -139,6 +139,9 @@ GET /forms.css HTTP/1\.[01]" \(304\|200\)
 GET /rhythm.css HTTP/1\.[01]" \(304\|200\)
 GET /surf.jpg HTTP/1\.[01]" \(304\|200\)
 
+# Netcraft
+HEAD / HTTP/1.1" 200 .* Netcraft Web Server Survey
+
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
 05:45:0[0-9] .* reopening logs
