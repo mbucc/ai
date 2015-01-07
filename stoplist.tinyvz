@@ -101,7 +101,7 @@ GET /tmUnblock\.cgi HTTP/1\.1" 400
 client closed prematurely connection while reading client request line
 
 # 
-GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\\.php HTTP/1\.1" 404
+GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\.php HTTP/1\.1" 404
 #GET /anan/ana/an\.php HTTP/1\.1" 404
 #GET /czcz/czc/cz\.php HTTP/1\.1" 404
 #GET /gaga/gag/ga\.php HTTP/1\.1" 404
