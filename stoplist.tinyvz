@@ -130,6 +130,13 @@ GET /user/soapCaller\.bs HTTP/1\.1" 404
 GET /wordpress HTTP/1\.1" 404
 GET /wp HTTP/1\.1" 404
 POST /cgi-bin/php[^"]\+" 404
+GET /cgi-bin/php4 HTTP/1\.1" 404
+GET /muieblackcat HTTP/1\.1" 404
+GET //phpMyAdmin/scripts/setup\.php HTTP/1\.1" 40[04]
+GET //phpmyadmin/scripts/setup\.php HTTP/1\.1" 40[04]
+GET //pma/scripts/setup\.php HTTP/1\.1" 40[04]
+GET //myadmin/scripts/setup\.php HTTP/1\.1" 40[04]
+GET //MyAdmin/scripts/setup\.php HTTP/1\.1" 40[04]
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
