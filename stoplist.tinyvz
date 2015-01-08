@@ -115,39 +115,36 @@ GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\.php HTTP/1\.1" 404
 GET http://[^"]\+ HTTP/1\.1" \(404\|200\)
 
 # Exploit attempts.
-GET //MyAdmin/scripts/setup\.php HTTP/1\.1" 40[04]
-GET //myadmin/scripts/setup\.php HTTP/1\.1" 40[04]
-GET //phpMyAdmin/scripts/setup\.php HTTP/1\.1" 40[04]
-GET //phpmyadmin/scripts/setup\.php HTTP/1\.1" 40[04]
-GET //pma/scripts/setup\.php HTTP/1\.1" 40[04]
+GET /.*/setup\.php HTTP/1\.1" 40[04]
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
 GET /blog HTTP/1\.1" 40[04]
 GET /cgi-bin/php4 HTTP/1\.1" 40[04]
+GET /css/css HTTP/1.0" 40[04]
 GET /drupal HTTP/1\.1" 40[04]
-GET /favicon.ico HTTP/1\.1" 40[04]
 GET /joomla HTTP/1\.1" 40[04]
 GET /manager/html HTTP/1\.1" 40[04]
 GET /muieblackcat HTTP/1\.1" 40[04]
-GET /myadmin/scripts/setup\.php HTTP/1\.1" 40[04]
-GET /phpMyAdmin/scripts/setup\.php HTTP/1\.1" 40[04]
-GET /pma/scripts/setup\.php HTTP/1\.1" 40[04]
 GET /robots\.txt HTTP/1\.1" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
+GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
 POST /cgi-bin/php[^"]\+" 40[04]
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
+GET /media_outlets/ HTTP/1\.1" \(304\|200\)
 GET /reset\.css HTTP/1\.[01]" \(304\|200\)
 GET /style\.css HTTP/1\.[01]" \(304\|200\)
 GET /forms\.css HTTP/1\.[01]" \(304\|200\)
 GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
 GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
+GET /favicon.ico HTTP/1\.1" 40[04]
 
 # Netcraft
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
+HEAD / HTTP/1\.0" 200 .* NetcraftSurveyAgent
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
