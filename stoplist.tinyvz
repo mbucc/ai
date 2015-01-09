@@ -47,8 +47,8 @@ postfix/qmgr.*: .*: removed
 postfix/qmgr.*: .*: from=<root@eventarelli.com>.*
 postfix/pickup.*: .* from=<root>
 postfix/cleanup.*: .*: message-id=.*
-:00:0[0-4].* postfix/pickup.* from=<logbot>
-:00:0[0-4].* postfix/qmgr.* from=<logbot@eventarelli.com>,
+:00:0[0-5].* postfix/pickup.* from=<logbot>
+:00:0[0-5].* postfix/qmgr.* from=<logbot@eventarelli.com>,
 
 # /var/log/udev
 # There are no rules defined under /etc/udev/rules.d
