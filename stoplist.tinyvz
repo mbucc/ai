@@ -130,6 +130,7 @@ GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
+HEAD /rom-0 HTTP/1.1" 404
 POST /cgi-bin/php[^"]\+" 40[04]
 
 # The normal website pages.
@@ -142,9 +143,10 @@ GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
 GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
 GET /favicon.ico HTTP/1\.1" 40[04]
 
-# Netcraft
+# Netcraft and it's ilk.
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
 HEAD / HTTP/1\.0" 200 .* NetcraftSurveyAgent
+HEAD / HTTP/1.1" 200 .* DomainTunoCrawler
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
