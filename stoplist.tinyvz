@@ -12,8 +12,13 @@ CRON.*: (root) CMD (.* run-parts --report /etc/cron.daily
 CRON.*: (root) CMD (.* run-parts --report /etc/cron.weekly
 CRON.*: (root) CMD (.* run-parts --report /etc/cron.monthly
 CRON.*: (logbot) CMD (/home/logbot/bin/ai.sh)
-09:[01][0-9]:[0-9][0-9] .* CRON\[.* session closed for user eventbot
+
+# eventbot cron job
 09:00:0[0-2] .* CRON\[.* session opened for user eventbot
+09:00:0[0-2] .* CRON\[.* (eventbot) CMD (\$HOME/ironhorse
+09:[01][0-9]:[0-9][0-9] .* postfix/pickup\[.* from=<eventbot>
+09:[01][0-9]:[0-9][0-9] .* postfix/qmgr\[.* from=<eventbot@eventarelli.com>
+09:[01][0-9]:[0-9][0-9] .* CRON\[.* session closed for user eventbot
 
 # Not sure why this comes out lower case sometimes.
 cron.*: (root) RELOAD (crontabs/root)
