@@ -155,3 +155,5 @@ client [0-9.]\+ closed keepalive connection
 # Before ignoring next one (which I've seen), 
 # read http://serverfault.com/questions/322415/securing-nginx-proxy
 # client timed out (110: Connection timed out) while reading client request headers
+client sent HTTP/1.1 request without "Host" header
+client sent invalid header line: "
