@@ -107,7 +107,7 @@ GET /tmUnblock\.cgi HTTP/1\.1" 400
  "-" 400 "-" "-"
 client closed prematurely connection while reading client request line
 
-# 
+#
 GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\.php HTTP/1\.1" 404
 #GET /anan/ana/an\.php HTTP/1\.1" 404
 #GET /czcz/czc/cz\.php HTTP/1\.1" 404
@@ -127,18 +127,21 @@ GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
 GET /blog HTTP/1\.1" 40[04]
 GET /cgi-bin/php4 HTTP/1\.1" 40[04]
+GET /cgi-bin/test-cgi HTTP/1\.1" 40[04]
 GET /css/css HTTP/1.0" 40[04]
 GET /drupal HTTP/1\.1" 40[04]
 GET /joomla HTTP/1\.1" 40[04]
 GET /manager/html HTTP/1\.1" 40[04]
 GET /muieblackcat HTTP/1\.1" 40[04]
 GET /robots\.txt HTTP/1\.1" 40[04]
+GET /rom-0 HTTP/1\.1" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
 HEAD /rom-0 HTTP/1.1" 404
 POST /cgi-bin/php[^"]\+" 40[04]
+POST /login\.action HTTP/1\.1" 404
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
@@ -148,18 +151,24 @@ GET /style\.css HTTP/1\.[01]" \(304\|200\)
 GET /forms\.css HTTP/1\.[01]" \(304\|200\)
 GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
 GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
-GET /favicon.ico HTTP/1\.1" 40[04]
+GET /favicon\.ico HTTP/1\.1" 40[04]
+GET /colorbrewer\.v1\.min\.js HTTP/1\.1" \(304\|200\)
+GET /topojson\.v1\.min\.js HTTP/1\.1" \(304\|200\)
+GET /map\.js HTTP/1\.1" \(304\|200\)
+GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
+GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
 
 # Netcraft and it's ilk.
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
 HEAD / HTTP/1\.0" 200 .* NetcraftSurveyAgent
-HEAD / HTTP/1.1" 200 .* DomainTunoCrawler
+HEAD / HTTP/1\.1" 200 .* DomainTunoCrawler
+HEAD / HTTP/1\.0" 200 "-" "-"
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
 05:45:0[0-9] .* reopening logs
 
-# Before ignoring next one (which I've seen), 
+# Before ignoring next one (which I've seen),
 # read http://serverfault.com/questions/322415/securing-nginx-proxy
 # client timed out (110: Connection timed out) while reading client request headers
 client sent HTTP/1.1 request without "Host" header
