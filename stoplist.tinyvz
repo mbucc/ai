@@ -143,6 +143,9 @@ HEAD /rom-0 HTTP/1.1" 404
 POST /cgi-bin/php[^"]\+" 40[04]
 POST /login\.action HTTP/1\.1" 404
 
+# Not sure, probing?
+GET / HTTP/1.1" 400 "-" "-"
+
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
 GET /media_outlets/ HTTP/1\.1" \(304\|200\)
@@ -157,6 +160,8 @@ GET /topojson\.v1\.min\.js HTTP/1\.1" \(304\|200\)
 GET /map\.js HTTP/1\.1" \(304\|200\)
 GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
 GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
+GET /submit/ HTTP/1.1" \(304\|200\)
+GET /api/chkdt HTTP/1.1" 400
 
 # Netcraft and it's ilk.
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
