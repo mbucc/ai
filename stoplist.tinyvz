@@ -162,6 +162,7 @@ GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
 GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
 GET /submit/ HTTP/1.1" \(304\|200\)
 GET /api/chkdt HTTP/1.1" 400
+GET /feedback/ HTTP/1\.1" 200
 
 # Netcraft and it's ilk.
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
