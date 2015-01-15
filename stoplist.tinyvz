@@ -148,21 +148,21 @@ GET / HTTP/1.1" 400 "-" "-"
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
+GET /api/chkdt HTTP/1.1" 400
+GET /colorbrewer\.v1\.min\.js HTTP/1\.1" \(304\|200\)
+GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
+GET /favicon\.ico HTTP/1\.1" 40[04]
+GET /feedback/ HTTP/1\.1" 200
+GET /forms\.css HTTP/1\.[01]" \(304\|200\)
+GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
+GET /map\.js HTTP/1\.1" \(304\|200\)
 GET /media_outlets/ HTTP/1\.1" \(304\|200\)
 GET /reset\.css HTTP/1\.[01]" \(304\|200\)
-GET /style\.css HTTP/1\.[01]" \(304\|200\)
-GET /forms\.css HTTP/1\.[01]" \(304\|200\)
 GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
-GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
-GET /favicon\.ico HTTP/1\.1" 40[04]
-GET /colorbrewer\.v1\.min\.js HTTP/1\.1" \(304\|200\)
-GET /topojson\.v1\.min\.js HTTP/1\.1" \(304\|200\)
-GET /map\.js HTTP/1\.1" \(304\|200\)
-GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
-GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
+GET /style\.css HTTP/1\.[01]" \(304\|200\)
 GET /submit/ HTTP/1.1" \(304\|200\)
-GET /api/chkdt HTTP/1.1" 400
-GET /feedback/ HTTP/1\.1" 200
+GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
+GET /topojson\.v1\.min\.js HTTP/1\.1" \(304\|200\)
 
 # Netcraft and it's ilk.
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
