@@ -62,6 +62,10 @@ postfix/cleanup.*: .*: message-id=.*
 # so I'm not sure why this was logged.
 monitor will print the received events for:
 
+# Ubuntu strange configuration?
+# see http://www.derkeiler.com/Mailing-Lists/securityfocus/Secure_Shell/2004-05/0024.html
+syslogin_perform_logout: logout() returned an error
+
 # dpkg
 # This one is a tough one.
 # The log entries are so short,
@@ -123,6 +127,9 @@ GET http://[^"]\+ HTTP/1\.1" \(404\|200\)
 
 # Exploit attempts.
 GET /.*/setup\.php HTTP/1\.1" 40[04]
+GET /.*install/ HTTP/1\.1" 400
+GET /.*\.php HTTP/1.1" 404
+GET // HTTP/1.1" 400
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
 GET /blog HTTP/1\.1" 40[04]
@@ -168,6 +175,7 @@ GET /topojson\.v1\.min\.js HTTP/1\.1" \(304\|200\)
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
 HEAD / HTTP/1\.0" 200 .* NetcraftSurveyAgent
 HEAD / HTTP/1\.1" 200 .* DomainTunoCrawler
+HEAD / HTTP/1\.1" 200 .* Gimme60bot
 HEAD / HTTP/1\.0" 200 "-" "-"
 
 # error_log - normal behavior.
