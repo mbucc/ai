@@ -141,7 +141,7 @@ GET /joomla HTTP/1\.1" 40[04]
 GET /manager/html HTTP/1\.1" 40[04]
 GET /muieblackcat HTTP/1\.1" 40[04]
 GET /robots\.txt HTTP/1\.1" 40[04]
-GET /rom-0 HTTP/1\.1" 40[04]
+GET /rom-0 HTTP/1\.[01]" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
@@ -182,8 +182,7 @@ HEAD / HTTP/1\.0" 200 "-" "-"
 client [0-9.]\+ closed keepalive connection
 05:45:0[0-9] .* reopening logs
 
-# Before ignoring next one (which I've seen),
 # read http://serverfault.com/questions/322415/securing-nginx-proxy
-# client timed out (110: Connection timed out) while reading client request headers
+client timed out (110: Connection timed out) while reading client request 
 client sent HTTP/1.1 request without "Host" header
 client sent invalid header line: "
