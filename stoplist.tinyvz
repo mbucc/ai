@@ -130,6 +130,7 @@ GET /.*/setup\.php HTTP/1\.1" 40[04]
 GET /.*install/ HTTP/1\.1" 400
 GET /.*\.php HTTP/1.1" 404
 GET // HTTP/1.1" 400
+GET //Net_work.xml HTTP/1\.1" 40[04]
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
 GET /blog HTTP/1\.1" 40[04]
@@ -140,7 +141,7 @@ GET /drupal HTTP/1\.1" 40[04]
 GET /joomla HTTP/1\.1" 40[04]
 GET /manager/html HTTP/1\.[01]" 40[04]
 GET /muieblackcat HTTP/1\.1" 40[04]
-GET /phppath/cgi_wrapper HTTP/1\.[01]" 404
+GET /phppath/.* HTTP/1\.[01]" 404
 GET /rom-0 HTTP/1\.[01]" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
@@ -160,7 +161,7 @@ GET /api/chkdt HTTP/1.1" 400
 GET /colorbrewer\.v1\.min\.js HTTP/1\.1" \(304\|200\)
 GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
 GET /favicon\.ico HTTP/1\.1" 40[04]
-GET /feedback/ HTTP/1\.1" 200
+GET /feedback/ HTTP/1\.1" \(304\|200\)
 GET /forms\.css HTTP/1\.[01]" \(304\|200\)
 GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
 GET /map\.js HTTP/1\.1" \(304\|200\)
