@@ -109,6 +109,9 @@ GET /tmUnblock\.cgi HTTP/1\.1" 400
 #
  "-" 400 0 "-" "-"
  "-" 400 "-" "-"
+ " " 400 "-" "-" -
+ "\\x00" 400 "-" "-" -
+ "" 400 "-" "-" - -
 client closed prematurely connection while reading client request line
 
 #
@@ -133,6 +136,7 @@ GET // HTTP/1.1" 400
 GET //Net_work.xml HTTP/1\.1" 40[04]
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
+GET /admin/ HTTP/1\.1" 40[04]
 GET /blog HTTP/1\.1" 40[04]
 GET /cgi-bin/php4 HTTP/1\.1" 40[04]
 GET /cgi-bin/test-cgi HTTP/1\.1" 40[04]
@@ -147,10 +151,12 @@ GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
+GET /wp-login/ HTTP/1\.1" 40[04]
 HEAD /rom-0 HTTP/1.1" 404
 POST //%63%67.*" 400
 POST /cgi-bin/php[^"]\+" 40[04]
 POST /login\.action HTTP/1\.1" 404
+recv() failed (104: Connection reset by peer) while sending to client,.*/cgi-bin/
 
 # Not sure, probing?  No user agent.
 GET / HTTP/1.1" 400 "-" "-"
@@ -188,6 +194,7 @@ client [0-9.]\+ closed keepalive connection
 05:45:0[0-9] .* reopening logs
 
 # read http://serverfault.com/questions/322415/securing-nginx-proxy
-client timed out (110: Connection timed out) while reading client request 
+client timed out (110: Connection timed out) while reading client request
 client sent HTTP/1.1 request without "Host" header
 client sent invalid header line: "
+client sent invalid method while reading client request line
