@@ -114,24 +114,16 @@ GET /tmUnblock\.cgi HTTP/1\.1" 400
  "" 400 "-" "-" - -
 client closed prematurely connection while reading client request line
 
-#
-GET /[a-z]\{4\}/[a-z]\{3\}/[a-z]\{2\}\.php HTTP/1\.1" 404
+# Wierd letter combinations like:
 #GET /anan/ana/an\.php HTTP/1\.1" 404
-#GET /czcz/czc/cz\.php HTTP/1\.1" 404
-#GET /gaga/gag/ga\.php HTTP/1\.1" 404
-#GET /hjhj/hjh/hj\.php HTTP/1\.1" 404
-#GET /lyly/lyl/ly\.php HTTP/1\.1" 404
-#GET /ococ/oco/oc\.php HTTP/1\.1" 404
-#GET /oyoy/oyo/oy\.php HTTP/1\.1" 404
-#GET /vzvz/vzv/vz\.php HTTP/1\.1" 404
 
 # Someone testing if redirects are allowed.
 GET http://[^"]\+ HTTP/1\.1" \(404\|200\)
 
 # Exploit attempts.
 GET /.*/setup\.php HTTP/1\.1" 40[04]
-GET /.*install/ HTTP/1\.1" 400
 GET /.*\.php HTTP/1.1" 404
+GET /.*install/ HTTP/1\.1" 400
 GET // HTTP/1.1" 400
 GET //Net_work.xml HTTP/1\.1" 40[04]
 GET /HNAP1/ HTTP/1\.1" 40[04]
@@ -173,8 +165,8 @@ GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
 GET /map\.js HTTP/1\.1" \(304\|200\)
 GET /media_outlets/ HTTP/1\.1" \(304\|200\)
 GET /reset\.css HTTP/1\.[01]" \(304\|200\)
-GET /robots\.txt HTTP/1\.[01]" 40[04]
 GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
+GET /robots\.txt HTTP/1\.[01]" 40[04]
 GET /style\.css HTTP/1\.[01]" \(304\|200\)
 GET /submit/ HTTP/1.1" \(304\|200\)
 GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
