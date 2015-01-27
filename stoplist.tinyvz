@@ -144,7 +144,7 @@ GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
-GET /wp-login.* HTTP/1\.1" 40[04]
+GET //\?wp-login.* HTTP/1\.1" 40[04]
 HEAD /rom-0 HTTP/1.1" 404
 POST //%63%67.*" 400
 POST /cgi-bin/php[^"]\+" 40[04]
