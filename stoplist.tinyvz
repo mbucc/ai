@@ -130,7 +130,7 @@ GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
 GET /admin/ HTTP/1\.1" 40[04]
 GET /blog HTTP/1\.1" 40[04]
-GET /cgi-bin/php4 HTTP/1\.1" 40[04]
+GET /cgi-bin/php.* HTTP/1\.1" 40[04]
 GET /cgi-bin/test-cgi HTTP/1\.1" 40[04]
 GET /css/css HTTP/1.0" 40[04]
 GET /drupal HTTP/1\.1" 40[04]
@@ -145,6 +145,7 @@ GET /w00tw00t[^"]\+ HTTP/1.1" 404
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
 GET //\?wp-login.* HTTP/1\.1" 40[04]
+GET //\?wp-admin.* HTTP/1\.1" 40[04]
 HEAD /rom-0 HTTP/1.1" 404
 POST //%63%67.*" 400
 POST /cgi-bin/php[^"]\+" 40[04]
