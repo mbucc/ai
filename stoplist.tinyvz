@@ -126,6 +126,7 @@ GET /.*\.php HTTP/1.1" 404
 GET /.*install/ HTTP/1\.1" 400
 GET // HTTP/1.1" 400
 GET //Net_work.xml HTTP/1\.1" 40[04]
+GET /CFIDE/administrator/ HTTP/1\.1" 404
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
 GET /admin/ HTTP/1\.1" 40[04]
