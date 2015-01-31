@@ -113,6 +113,7 @@ GET /tmUnblock\.cgi HTTP/1\.1" 400
  "\\x00" 400 "-" "-" -
  "" 400 "-" "-" - -
 client closed prematurely connection while reading client request line
+client closed prematurely connection, so upstream connection is closed too .*\.php HTTP
 
 # Wierd letter combinations like:
 #GET /anan/ana/an\.php HTTP/1\.1" 404
@@ -129,7 +130,15 @@ GET //Net_work.xml HTTP/1\.1" 40[04]
 GET /CFIDE/administrator/ HTTP/1\.1" 404
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
-GET /admin/ HTTP/1\.1" 40[04]
+# 499 is a status that is custom to Nginx.
+# It signals that the client closed the connection
+# before Nginx (the proxy, in my case) can respond.
+# Definitely want to catch those for real pages,
+# as it means the site is too slow.
+# But for exploit attemps, we will ignore.
+# (In this specific case, the client closed the connection
+# immediately, based on the log entries.)
+GET /admin/\(.*\.php\)\? HTTP/1\.[01]" \(400\|404\|499\)
 GET /blog HTTP/1\.1" 40[04]
 GET /cgi-bin/php.* HTTP/1\.1" 40[04]
 GET /cgi-bin/test-cgi HTTP/1\.1" 40[04]
