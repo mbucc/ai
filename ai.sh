@@ -15,17 +15,39 @@ RETAIL=/usr/local/bin/retail
 mkdir -p ${RETAIL_DATA}
 
 #
-# Remove comments from stop files.
-#
-TMP1=/tmp/$(basename $0)-files.$$.tmp
-TMP2=/tmp/$(basename $0)-rules.$$.tmp
-grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stopfiles > $TMP1
-grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stoplist > $TMP2
-
-#
 # LOGNAME is more universal than USERNAME.
 #
 [ "x$MAILTO" != "x" ] && TO=$MAILTO || TO=$LOGNAME
+
+#
+# Securely create a temp directory or abort with email.
+# http://www.linuxsecurity.com/content/view/115462/151/
+#
+TMPD=$(/bin/mktemp -d "${TMPDIR-/tmp}/ai.XXXXXXXXXX")
+if [ $? != 0 ] ; then
+    TMPD=${TMPDIR-/tmp}/ai.$RANDOM.$RANDOM.$RANDOM.$$
+    ERR=$(umask 0777; mkdir "$TMPD" 2>&1)
+    if [ $? != 0 ] ; then
+        /usr/sbin/sendmail -t <<EOF
+To: $TO
+Subject: logbot failed to create temporary directory!
+
+Can not create temporary directory: $TMPD
+mkdir: $ERR
+Command: $0
+$(date)
+EOF
+        exit 1
+    fi
+fi
+
+#
+# Remove comments from stop files.
+#
+TMP1="$TMPD"/$(basename $0)-files.$$.tmp
+TMP2="$TMPD"/$(basename $0)-rules.$$.tmp
+grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stopfiles > $TMP1
+grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stoplist > $TMP2
 
 #
 # Write out HTML email.
@@ -35,7 +57,7 @@ grep -v '\(^#\|^[:blank:]*$\)' $HOME/bin/stoplist > $TMP2
 #
 # doctype and xmlns guidance from http://htmlemailboilerplate.com/.
 #
-OUTFN=/tmp/$(basename $0)-mail.$$.tmp
+OUTFN="$TMPD"/$(basename $0)-mail.$$.tmp
 
 cat > $OUTFN << EOF
 To: $TO
@@ -58,7 +80,7 @@ EOF
 # So use line count change to figure out
 # if we need to send email.
 N0=$(cat $OUTFN | wc -l)
-TMPFN=/tmp/ai.tmp
+TMPFN="$TMPD"/ai.tmp
 find $LOGDIR -type f -group adm | grep -v -f $TMP1 | while read fn; do
     $RETAIL -o ${RETAIL_DATA}/ $fn > $TMPFN
     if grep -v -f $TMP2 $TMPFN > /dev/null ; then
@@ -85,4 +107,4 @@ if [ $N1 -gt $N0 ] ; then
 	/usr/sbin/sendmail -t < $OUTFN
 fi
 
-rm -f $TMP1 $TMP2 $OUTFN
+rm -fr "$TMPD"
