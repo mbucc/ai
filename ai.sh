@@ -26,7 +26,7 @@ mkdir -p ${RETAIL_DATA}
 TMPD=$(/bin/mktemp -d "${TMPDIR-/tmp}/ai.XXXXXXXXXX")
 if [ $? != 0 ] ; then
     TMPD=${TMPDIR-/tmp}/ai.$RANDOM.$RANDOM.$RANDOM.$$
-    ERR=$(umask 0777; mkdir "$TMPD" 2>&1)
+    ERR=$(umask 077; mkdir "$TMPD" 2>&1)
     if [ $? != 0 ] ; then
         /usr/sbin/sendmail -t <<EOF
 To: $TO
