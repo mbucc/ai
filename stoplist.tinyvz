@@ -121,7 +121,14 @@ client closed prematurely connection, so upstream connection is closed too .*\.p
 # Someone testing if redirects are allowed.
 GET http://[^"]\+ HTTP/1\.1" \(404\|200\)
 
+# Raw SSL.
+# TODO: fix nginx config.
+# see http://stackoverflow.com/questions/21340235/reproducing-iis-reverse-proxy-config-with-nginx
+\x00" 400 "-" "-"
+
 # Exploit attempts.
+# We don't allow HTTP tunneling.
+CONNECT .* HTTP/1\.1" 501
 GET /.*/setup\.php HTTP/1\.1" 40[04]
 GET /.*\.php HTTP/1.1" 404
 GET /.*install/ HTTP/1\.1" 400
@@ -140,8 +147,12 @@ GET /actionnews/index/ HTTP/1\.1" 40[04]
 # immediately, based on the log entries.)
 GET /admin/\(.*\.php\)\? HTTP/1\.[01]" \(400\|404\|499\)
 GET /blog HTTP/1\.1" 40[04]
-GET /cgi-bin/php.* HTTP/1\.1" 40[04]
-GET /cgi-bin/test-cgi HTTP/1\.1" 40[04]
+GET //\?cgi-bin/nph-test-cgi HTTP/1\.1" 40[04]
+GET //\?cgi-bin/php.* HTTP/1\.1" 40[04]
+GET //\?cgi-bin/test-cgi HTTP/1\.1" 40[04]
+GET //\?cgi-bin/test.cgi HTTP/1\.1" 40[04]
+# morx.jsp: Zimbra file inclusion/Shell upload exploit
+GET //\?downloads/morx.jsp HTTP/1\.1" 40[04]
 GET /css/css HTTP/1.0" 40[04]
 GET /drupal HTTP/1\.1" 40[04]
 GET /joomla HTTP/1\.1" 40[04]
