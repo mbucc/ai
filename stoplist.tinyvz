@@ -151,15 +151,33 @@ GET //\?cgi-bin/nph-test-cgi HTTP/1\.1" 40[04]
 GET //\?cgi-bin/php.* HTTP/1\.1" 40[04]
 GET //\?cgi-bin/test-cgi HTTP/1\.1" 40[04]
 GET //\?cgi-bin/test.cgi HTTP/1\.1" 40[04]
+
 # morx.jsp: Zimbra file inclusion/Shell upload exploit
 GET //\?downloads/morx.jsp HTTP/1\.1" 40[04]
+
 GET /css/css HTTP/1.0" 40[04]
 GET /drupal HTTP/1\.1" 40[04]
 GET /joomla HTTP/1\.1" 40[04]
 GET /manager/html HTTP/1\.[01]" 40[04]
 GET /muieblackcat HTTP/1\.1" 40[04]
-GET /phpmyadmin/.* HTTP/1\.[01]" 40[04]
 GET /phppath/.* HTTP/1\.[01]" 404
+
+# phpMyAdmin Code Injection
+GET /[Pp]/\?[Mm]/\?[Aa].*/ HTTP/1\.1" 40[04]
+GET /[Pp][Hh][Pp]-\?[Mm][Yy]-\?[Aa][Dd][Mm][Ii][Nn].*/.* HTTP/1\.[01]" 40[04]
+GET /\(web\)\?sql/ HTTP/1\.1" 40[04]
+GET /dbadmin/ HTTP/1\.1" 40[04]
+GET /myadmin/ HTTP/1\.1" 40[04]
+GET /mysql-admin/ HTTP/1\.1" 40[04]
+GET /mysql/ HTTP/1\.1" 40[04]
+GET /mysqladmin/ HTTP/1\.1" 40[04]
+GET /mysqlmanager/ HTTP/1\.1" 40[04]
+GET /sqlmanager/ HTTP/1\.1" 40[04]
+GET /sqlweb/ HTTP/1\.1" 40[04]
+GET /webadmin/ HTTP/1\.1" 40[04]
+GET /webdb/ HTTP/1\.1" 40[04]
+GET <title>phpMyAdmin HTTP/1\.1" 40[04]
+
 GET /rom-0 HTTP/1\.[01]" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
