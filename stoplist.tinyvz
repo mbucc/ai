@@ -118,8 +118,11 @@ client closed prematurely connection, so upstream connection is closed too .*\.p
 # Wierd letter combinations like:
 #GET /anan/ana/an\.php HTTP/1\.1" 404
 
-# Someone testing if redirects are allowed.
-GET http://[^"]\+ HTTP/1\.1" \(404\|200\)
+# Someone testing if our server allows redirects.
+# Nginx sometimes returns 200 and other times a 404,
+# but we can distinguish by the number of bytes returned.
+ 2366 .* "GET http[^"]\+" 200
+ 740 .* "GET http[^"]\+" 404
 
 # Raw SSL.
 # TODO: fix nginx config.
@@ -181,10 +184,16 @@ GET <title>phpMyAdmin HTTP/1\.1" 40[04]
 GET /rom-0 HTTP/1\.[01]" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
+
+# Wordpress
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
 GET //\?wp-login.* HTTP/1\.1" 40[04]
 GET //\?wp-admin.* HTTP/1\.1" 40[04]
+GET /xmlrpc.php?rsd=1 HTTP/1\.1" 40[04]
+
+
+
 HEAD /rom-0 HTTP/1.1" 404
 POST //%63%67.*" 400
 POST /cgi-bin/php[^"]\+" 40[04]
@@ -196,10 +205,8 @@ GET / HTTP/1.1" 400 "-" "-"
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
-GET /api/chkdt HTTP/1.1" 400
 GET /colorbrewer\.v1\.min\.js HTTP/1\.1" \(304\|200\)
 GET /d3\.v3\.min\.js HTTP/1\.1" \(304\|200\)
-GET /favicon\.ico HTTP/1\.1" 40[04]
 GET /feedback/ HTTP/1\.1" \(304\|200\)
 GET /forms\.css HTTP/1\.[01]" \(304\|200\)
 GET /ma-counties\.json HTTP/1\.1" \(304\|200\)
@@ -207,12 +214,21 @@ GET /map\.js HTTP/1\.1" \(304\|200\)
 GET /media_outlets/ HTTP/1\.1" \(304\|200\)
 GET /reset\.css HTTP/1\.[01]" \(304\|200\)
 GET /rhythm\.css HTTP/1\.[01]" \(304\|200\)
-GET /[rR]obots\.txt HTTP/1\.[01]" 40[04]
-GET /[Ss]ite[Mm]ap\.xml HTTP/1\.[01]" 404
 GET /style\.css HTTP/1\.[01]" \(304\|200\)
 GET /submit/ HTTP/1.1" \(304\|200\)
 GET /surf\.jpg HTTP/1\.[01]" \(304\|200\)
 GET /topojson\.v1\.min\.js HTTP/1\.1" \(304\|200\)
+
+# Normal website pages
+# that went stale
+# or otherwise are missing.
+GET /[Ss]ite[Mm]ap\.xml HTTP/1\.[01]" 404
+GET /[rR]obots\.txt HTTP/1\.[01]" 404
+GET /api/chkdt HTTP/1\.[01]" 400
+GET /back\.css HTTP/1\.[01]" 404
+GET /blog/ HTTP/1\.[01]" 404
+GET /css/style\.css HTTP/1\.[01]" 404
+GET /favicon\.ico HTTP/1\.[01]" 404
 
 # Netcraft and it's ilk.
 HEAD / HTTP/1\.1" 200 .* Netcraft Web Server Survey
@@ -222,7 +238,7 @@ HEAD / HTTP/1\.1" 200 .* Gimme60bot
 
 # Wierd. Not sure, probably some kind of scan.
 HEAD / HTTP/1\.[01]" 200 "-" "-"
-OPTIONS / HTTP/1\.1" 501 "-" "-" -
+OPTIONS / HTTP/1\.1" 501
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
