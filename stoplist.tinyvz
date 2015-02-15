@@ -131,7 +131,8 @@ client closed prematurely connection, so upstream connection is closed too .*\.p
 
 # Exploit attempts.
 # We don't allow HTTP tunneling.
-CONNECT .* HTTP/1\.1" 501
+CONNECT .* HTTP/1\.1" \(501\|400\)
+
 GET /.*/setup\.php HTTP/1\.1" 40[04]
 GET /.*\.php HTTP/1.1" 404
 GET /.*install/ HTTP/1\.1" 400
@@ -245,7 +246,7 @@ client [0-9.]\+ closed keepalive connection
 05:45:0[0-9] .* reopening logs
 
 # read http://serverfault.com/questions/322415/securing-nginx-proxy
-client timed out (110: Connection timed out) while reading client request
 client sent HTTP/1.1 request without "Host" header
 client sent invalid header line: "
-client sent invalid method while reading client request line
+client sent invalid \(method\|request\) while reading client request line
+client timed out (110: Connection timed out) while reading client request
