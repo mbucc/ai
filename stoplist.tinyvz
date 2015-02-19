@@ -151,21 +151,31 @@ GET /actionnews/index/ HTTP/1\.1" 40[04]
 # immediately, based on the log entries.)
 GET /admin/\(.*\.php\)\? HTTP/1\.[01]" \(400\|404\|499\)
 GET /blog HTTP/1\.1" 40[04]
+
+# To avoid nph-test-cgi 1997 vulneratbility,
+# upgrade to Apache version 1.1.3 (!!)
+# test-cgi is in a 1996 security advisory.
+# http://www.iss.net/security_center/reference/vuln/http-cgi-nph.htm
 GET //\?cgi-bin/nph-test-cgi HTTP/1\.1" 40[04]
-GET //\?cgi-bin/php.* HTTP/1\.1" 40[04]
-GET //\?cgi-bin/test-cgi HTTP/1\.1" 40[04]
-GET //\?cgi-bin/test.cgi HTTP/1\.1" 40[04]
+GET //\?cgi-bin/test.cgi HTTP/1\.[01]" 40[04]
+
+# php cgi remote code execution
+GET //\?cgi-bin/php.* HTTP/1\.[01]" 40[04]
+GET //?index.php
+GET //\?local-bin/php.* HTTP/1\.[01]" 40[04]
+POST //\?cgi-bin/php.* HTTP/1\.[01]" 40[04]
 
 # morx.jsp: Zimbra file inclusion/Shell upload exploit
 GET //\?downloads/morx.jsp HTTP/1\.1" 40[04]
-
 
 GET /css/css HTTP/1.0" 40[04]
 GET /drupal HTTP/1\.1" 40[04]
 GET /joomla HTTP/1\.1" 40[04]
 GET /manager/html HTTP/1\.[01]" 40[04]
 GET /muieblackcat HTTP/1\.1" 40[04]
-GET /phppath/.* HTTP/1\.[01]" 404
+
+# Plesk (web control panel)
+GET //\?phppath/.* HTTP/1\.[01]" 40[04]
 
 # phpMyAdmin Code Injection
 GET /[Pp]/\?[Mm]/\?[Aa].*/ HTTP/1\.1" 40[04]
@@ -191,17 +201,17 @@ GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
 GET /w00tw00t[^"]\+ HTTP/1.1" 404
 
 # Wordpress
+GET //\?wp-admin.* HTTP/1\.1" 40[04]
+GET //\?wp-content/.* HTTP/1\.1" 404
+GET //\?wp-login.* HTTP/1\.1" 40[04]
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
-GET //\?wp-login.* HTTP/1\.1" 40[04]
-GET //\?wp-admin.* HTTP/1\.1" 40[04]
 GET /xmlrpc.php?rsd=1 HTTP/1\.1" 40[04]
 
 
 
 HEAD /rom-0 HTTP/1.1" 404
 POST //%63%67.*" 400
-POST /cgi-bin/php[^"]\+" 40[04]
 POST /login\.action HTTP/1\.1" 404
 recv() failed (104: Connection reset by peer) while sending to client,.*/cgi-bin/
 
@@ -244,6 +254,12 @@ HEAD / HTTP/1\.1" 200 .* Gimme60bot
 # Wierd. Not sure, probably some kind of scan.
 HEAD / HTTP/1\.[01]" 200 "-" "-"
 OPTIONS / HTTP/1\.1" 501
+
+# Per his github page:
+#	This is the fastest Internet port scanner.
+#	It can scan the entire Internet in under 6 minutes,
+#	 transmitting 10 million packets per second.
+https://github.com/robertdavidgraham/masscan
 
 # error_log - normal behavior.
 client [0-9.]\+ closed keepalive connection
