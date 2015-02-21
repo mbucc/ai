@@ -133,6 +133,13 @@ client closed prematurely connection, so upstream connection is closed too .*\.p
 # We don't allow HTTP tunneling.
 CONNECT .* HTTP/1\.1" \(501\|400\)
 
+# Checking if customers can log in?
+GET /customer/account/login HTTP/1\.1" 40[04]
+
+# Checking if we run php?
+GET //index\.php HTTP/1\.1" 400
+
+
 GET /.*/setup\.php HTTP/1\.1" 40[04]
 GET /.*\.php HTTP/1.1" 404
 GET /.*install/ HTTP/1\.1" 400
@@ -141,6 +148,7 @@ GET //Net_work.xml HTTP/1\.1" 40[04]
 GET /CFIDE/administrator/ HTTP/1\.1" 404
 GET /HNAP1/ HTTP/1\.1" 40[04]
 GET /actionnews/index/ HTTP/1\.1" 40[04]
+
 # 499 is a status that is custom to Nginx.
 # It signals that the client closed the connection
 # before Nginx (the proxy, in my case) can respond.
@@ -207,7 +215,6 @@ GET //\?wp-login.* HTTP/1\.1" 40[04]
 GET /wordpress HTTP/1\.1" 40[04]
 GET /wp HTTP/1\.1" 40[04]
 GET /xmlrpc.php?rsd=1 HTTP/1\.1" 40[04]
-
 
 
 HEAD /rom-0 HTTP/1.1" 404
