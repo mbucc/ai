@@ -136,7 +136,7 @@ CONNECT .* HTTP/1\.1" \(501\|400\)
 # Checking if customers can log in?
 GET /customer/account/login HTTP/1\.1" 40[04]
 
-# Checking if we run php?
+# Simply checking if we run php?
 GET //index\.php HTTP/1\.1" 400
 
 
@@ -186,9 +186,12 @@ GET /muieblackcat HTTP/1\.1" 40[04]
 GET //\?phppath/.* HTTP/1\.[01]" 40[04]
 
 # phpMyAdmin Code Injection
-GET /[Pp]/\?[Mm]/\?[Aa].*/ HTTP/1\.1" 40[04]
+GET /[Pp]/[Mm]/[Aa].*/ HTTP/1\.1" 40[04]
+GET /[Pp][Mm][Aa].*/ HTTP/1\.1" 40[04]
 GET /[Pp][Hh][Pp]-\?[Mm][Yy]-\?[Aa][Dd][Mm][Ii][Nn].*/.* HTTP/1\.[01]" 40[04]
-GET /\(web\)\?sql/ HTTP/1\.1" 40[04]
+GET /MyAdmin/scripts/setup\.php HTTP/1\.1" \(400\|404\|499\)
+GET /websql/ HTTP/1\.1" 40[04]
+GET /sql/ HTTP/1\.1" 40[04]
 GET /dbadmin/ HTTP/1\.1" 40[04]
 GET /myadmin/ HTTP/1\.1" 40[04]
 GET /mysql-admin/ HTTP/1\.1" 40[04]
@@ -200,9 +203,13 @@ GET /sqlweb/ HTTP/1\.1" 40[04]
 GET /webadmin/ HTTP/1\.1" 40[04]
 GET /webdb/ HTTP/1\.1" 40[04]
 GET <title>phpMyAdmin HTTP/1\.1" 40[04]
+"ZmEu"
 
 # Looking if we run oscommerce.
 GET /tag_products\.php.* HTTP/1\.[01]" 404
+
+# Looking for Magento
+GET /js/mage/cookies\.js HTTP/1\.[01]" 40[04]
 
 GET /rom-0 HTTP/1\.[01]" 40[04]
 GET /user/soapCaller\.bs HTTP/1\.1" 40[04]
@@ -224,6 +231,7 @@ recv() failed (104: Connection reset by peer) while sending to client,.*/cgi-bin
 
 # Not sure, probing?  No user agent.
 GET / HTTP/1.1" 400 "-" "-"
+GET  HTTP/1\.1" 400 "-" "-"
 
 # The normal website pages.
 GET / HTTP/1\.[01]" \(304\|200\)
